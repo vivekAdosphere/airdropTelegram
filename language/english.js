@@ -1,0 +1,7 @@
+module.exports = {
+    welcomeMessage: "Hello there ,Please answer this : 50-5",
+
+    taskList: "Please perform the tasks below to earn up to 5 BUSD\n✔️ Multi Finance is audited by CyberScope.\n\n(https://github.com/coinscope-co/audits/blob/main/mlm/audit.pdf)✍️ 4,000 valid participants will be randomly rewarded, along with the top 500 referrers.\n\n🔵MANDATORY TASKS(2.50 BUSD)\n\n🔸 Join our Telegram group(https: //t.me/MultiFinance_chat) and channel. (https://t.me/MultiFinance_channel) (Mandatory: 1.25 BUSD)\n\n🔸Follow our Twitter, (https: //twitter.com/MultiFiProtocol) like and retweet the pinned post. (Mandatory: 1.25 BUSD)\n\n🔵OPTIONAL TASKS(UP TO 2.50 BUSD)\n\n🔸 Follow our Medium.(https: //medium.com/@MultiFiProtocol) (Optional: 0.70 BUSD)\n\n🔸Follow our Reddit.(https: //www.reddit.com/u/MultiFinance) (Optional: 0.70 BUSD)\n\n🔸Join our Discord.(https: //discord.gg/PQSxynESEn) (Optional: 0.70 BUSD)\n\n🔸Follow Airdrop Detective Twitter, (http: //www.twitter.com/AirdropDet) like and retweet the post about the Multi Finance Airdrop. (Optional: 0.30 BUSD)\n\n🔸Join Airdrop Detective Telegram.(https: //t.me/AirdropDetective) (Optional: 0.10 BUSD)\n\n🔵REFERRAL REWARD\n\n✍️ The top 500 referrers will get 20 MLM(~$20) each",
+
+    somethingWentWrong: "Oops,something went wrong, Please try again with hi"
+}
