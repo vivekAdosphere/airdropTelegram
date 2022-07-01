@@ -94,3 +94,4 @@
 {"level":"error","message":"Error from discord handler, Oops,something went wrong, Please try again with /start command","timestamp":"1/7/2022, 5:04:29 pm"}
 {"level":"error","message":"Error,Oops,something went wrong, Please try again with /start command","timestamp":"1/7/2022, 6:41:29 pm"}
 {"level":"error","message":"Error from handle text message,Oops,something went wrong, Please try again with /start command","timestamp":"1/7/2022, 6:47:50 pm"}
+{"level":"error","message":"Error from instagram handler, Oops,something went wrong, Please try again with /start command","timestamp":"1/7/2022, 10:09:08 pm"}

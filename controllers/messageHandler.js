@@ -4,7 +4,7 @@ const { MapToLocal } = require("../functionality/mapToLocal");
 const { clearFlags } = require("../functionality/utilities");
 const languageChooser = require("../language/languageChooser");
 const { sendMessage, checkChannelMemberStatus, sendMessageWith3options, sendMessageWithInlineKeyboard } = require("../functionality/messageSender");
-const { startHandler, answerHandler, emailHandler, twitterProfileHandler, redditProfileHandler, discordUsernameHandler, facebookProfileHandler, instagramProfileHandler, discordInvitationHandler, telegramUsernamesHandler, twitterUsernamesHandler, walletAddressHandler, thankYouHandler, retweetProfileHandler } = require("../controllers/messagingFunction")
+const { startHandler, answerHandler, emailHandler, twitterProfileHandler, redditProfileHandler, discordUsernameHandler, facebookProfileHandler, instagramProfileHandler, discordInvitationHandler, telegramUsernamesHandler, twitterUsernamesHandler, walletAddressHandler, thankYouHandler, retweetProfileHandler, firstTelegramUserHandler, secondTelegramUserHandler, thirdTelegramUserHandler, forthTelegramUserHandler, secondTwitterUserHandler, firstTwitterUserHandler, thirdTwitterUserHandler, forthTwitterUserHandler, } = require("../controllers/messagingFunction")
 
 const flowPathIndicator = new MapToLocal(mapNames.flowPathIndicator);
 const selectedCommunicationLanguage = new MapToLocal(mapNames.selectedCommunicationLanguage);
@@ -13,11 +13,9 @@ exports.handleTextMessage = async(chatId, message, firstName) => {
     try {
         console.log(flowPathIndicator.get(chatId.toString()))
         chatId = chatId.toString()
+
         if (message === "/start") {
             startHandler(chatId);
-        } else if (message === "SKIP THE TASK") {
-            flowPathIndicator.set(chatId, "8")
-
         } else if (flowPathIndicator.has(chatId)) {
             switch (flowPathIndicator.get(chatId)) {
                 case "1":
@@ -51,12 +49,36 @@ exports.handleTextMessage = async(chatId, message, firstName) => {
                     telegramUsernamesHandler(chatId, message)
                     break
                 case "11":
-                    twitterUsernamesHandler(chatId, message)
+                    firstTelegramUserHandler(chatId, message)
                     break
                 case "12":
-                    walletAddressHandler(chatId, message)
+                    secondTelegramUserHandler(chatId, message)
                     break
                 case "13":
+                    thirdTelegramUserHandler(chatId, message)
+                    break
+                case "14":
+                    forthTelegramUserHandler(chatId, message)
+                    break
+                case "15":
+                    twitterUsernamesHandler(chatId, message)
+                    break
+                case "16":
+                    firstTwitterUserHandler(chatId, message)
+                    break
+                case "17":
+                    secondTwitterUserHandler(chatId, message)
+                    break
+                case "18":
+                    thirdTwitterUserHandler(chatId, message)
+                    break
+                case "19":
+                    forthTwitterUserHandler(chatId, message)
+                    break
+                case "20":
+                    walletAddressHandler(chatId, message)
+                    break
+                case "21":
                     thankYouHandler(chatId, message)
                     break
                 default:

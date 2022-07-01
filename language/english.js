@@ -25,10 +25,21 @@ module.exports = {
     askForFacebookProfileLink: "Please submit your facebook Profile Link\n\n✍️ For example : https://www.facebook.com/airdrop",
     askForInstagramProfileLink: "Please submit your instagram Profile Link\n\n✍️ For example : https://www.instagram.com/oyevickky",
     askForDiscordInvitationLink: "Please submit your Discord Invitation Link\n\n✍️ For example : https://www.discord.com//MultiFincance",
-    askForTelegramUserNames: "Please Telegram submit user names in message",
-    askForTwitterUserNames: "Please Twitter submit user names in message",
+    askForTelegramUserNames: "Please submit 5 Telegram user names in message",
+    askForTwitterUserNames: "Please  submit 5 Twitter user names in message",
     askForWalletAddress: "Please submit your wallet address",
 
+    //telegram user names input
+    askForSecondUserName: "Please submit second user name for telegram",
+    askForThirdUserName: "Please submit third user name for telegram",
+    askForForthUserName: "Please submit forth user name for telegram",
+    askForFifthUserName: "Please submit fifth user name for telegram",
+
+    //twitter user names input
+    askForSecondTwitterUser: "Please submit second user name for twitter",
+    askForThirdTwitterUser: "Please submit third user name for twitter",
+    askForForthTwitterUser: "Please submit forth user name for twitter",
+    askForFifthTwitterUser: "Please submit fifth user name for twitter",
     thankYouMessage: "Thank You ,For your response",
 
 

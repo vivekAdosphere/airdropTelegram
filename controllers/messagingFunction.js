@@ -2,7 +2,7 @@ const mapNames = require("../config/mapNames");
 const logger = require("../functionality/logger");
 const { MapToLocal } = require("../functionality/mapToLocal");
 const languageChooser = require('../language/languageChooser');
-const { sendMessage, sendMessageWithInlineKeyboard, sendMessageWith2Buttons } = require("../functionality/messageSender");
+const { sendMessage, sendMessageWithInlineKeyboard, sendMessageWith2Buttons, sendMessageWithOneButton } = require("../functionality/messageSender");
 const { clearFlags, urlVerifier } = require("../functionality/utilities")
 const flowPathIndicator = new MapToLocal(mapNames.flowPathIndicator);
 const userData = new MapToLocal(mapNames.userData);
@@ -157,8 +157,8 @@ exports.discordUsernameHandler = async(chatId, message) => {
 
 exports.facebookProfileHandler = async(chatId, message) => {
     try {
-        if (message.includes("#")) {
-            await sendMessageWith2Buttons(chatId, languageChooser(chatId).askForFacebookProfileLink, "facebook_profile");
+        if (message.match(/\w+#\d{4}/i)) {
+            await sendMessageWith2Buttons(chatId, languageChooser(chatId).askForFacebookProfileLink);
             flowPathIndicator.set(chatId, "8")
         } else {
             await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
@@ -171,25 +171,32 @@ exports.facebookProfileHandler = async(chatId, message) => {
 }
 exports.instagramProfileHandler = async(chatId, message) => {
     try {
-        if (await urlVerifier(message, "facebook")) {
-            await sendMessageWith2Buttons(chatId, languageChooser(chatId).askForInstagramProfileLink, "instagram_profile");
+        if (await urlVerifier(message, "facebook") || message === "SKIP THE TASK") {
+            await sendMessageWith2Buttons(chatId, languageChooser(chatId).askForInstagramProfileLink);
             flowPathIndicator.set(chatId, "9")
 
+        } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
+            flowPathIndicator.set(chatId, "21")
         } else {
             await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
         }
 
     } catch (err) {
         logger.error(`Error from instagram handler, ${languageChooser(chatId).somethingWentWrong}`);
+        console.log(err.message)
         clearFlags(chatId)
     }
 }
 
 exports.discordInvitationHandler = async(chatId, message) => {
     try {
-        if (await urlVerifier(message, "instagram")) {
-            await sendMessageWith2Buttons(chatId, languageChooser(chatId).askForDiscordInvitationLink, "discord_invitation")
+        if (await urlVerifier(message, "instagram") || message === "SKIP THE TASK") {
+            await sendMessageWith2Buttons(chatId, languageChooser(chatId).askForDiscordInvitationLink)
             flowPathIndicator.set(chatId, "10")
+        } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
+            flowPathIndicator.set(chatId, "21")
         } else {
             await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
         }
@@ -203,9 +210,12 @@ exports.discordInvitationHandler = async(chatId, message) => {
 
 exports.telegramUsernamesHandler = async(chatId, message) => {
     try {
-        if (await urlVerifier(message, "discord")) {
-            await sendMessage(chatId, languageChooser(chatId).askForTelegramUserNames);
+        if (await urlVerifier(message, "discord") || message === "SKIP THE TASK") {
+            await sendMessageWithOneButton(chatId, languageChooser(chatId).askForTelegramUserNames, "Submit First user name", "firstTelegram");
             flowPathIndicator.set(chatId, "11");
+        } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
+            flowPathIndicator.set(chatId, "21")
         } else {
             await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
         }
@@ -216,20 +226,174 @@ exports.telegramUsernamesHandler = async(chatId, message) => {
     }
 }
 
+exports.firstTelegramUserHandler = async(chatId, message) => {
+    try {
+        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+            await sendMessageWithOneButton(chatId, languageChooser(chatId).askForSecondUserName)
+            flowPathIndicator.set(chatId, "12")
+        } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
+            flowPathIndicator.set(chatId, "21")
+        } else {
+            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+        }
+    } catch (err) {
+        logger.error(`Error from telegram usernames handler, ${languageChooser(chatId).somethingWentWrong}`);
+        clearFlags(chatId)
+    }
+}
+
+exports.secondTelegramUserHandler = async(chatId, message) => {
+    try {
+        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+            await sendMessageWithOneButton(chatId, languageChooser(chatId).askForThirdUserName)
+            flowPathIndicator.set(chatId, "13")
+        } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
+            flowPathIndicator.set(chatId, "21")
+        } else {
+            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+        }
+    } catch (err) {
+        logger.error(`Error from second telegram usernames handler, ${languageChooser(chatId).somethingWentWrong}`);
+        clearFlags(chatId)
+    }
+
+}
+
+exports.thirdTelegramUserHandler = async(chatId, message) => {
+    try {
+        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+            await sendMessageWithOneButton(chatId, languageChooser(chatId).askForForthUserName)
+            flowPathIndicator.set(chatId, "14")
+        } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
+            flowPathIndicator.set(chatId, "21")
+        } else {
+            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+        }
+    } catch (err) {
+        logger.error(`Error from second telegram usernames handler, ${languageChooser(chatId).somethingWentWrong}`);
+        clearFlags(chatId)
+    }
+
+}
+exports.forthTelegramUserHandler = async(chatId, message) => {
+    try {
+        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+            await sendMessageWithOneButton(chatId, languageChooser(chatId).askForFifthUserName)
+            flowPathIndicator.set(chatId, "15")
+        } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
+            flowPathIndicator.set(chatId, "21")
+        } else {
+            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+        }
+    } catch (err) {
+        logger.error(`Error from second telegram usernames handler, ${languageChooser(chatId).somethingWentWrong}`);
+        clearFlags(chatId)
+    }
+
+}
+
 exports.twitterUsernamesHandler = async(chatId, message) => {
     try {
-        await sendMessage(chatId, languageChooser(chatId).askForTwitterUserNames)
-        flowPathIndicator.set(chatId, "12")
+        if (validate.isAlphabetic(message)) {
+            await sendMessageWithOneButton(chatId, languageChooser(chatId).askForTwitterUserNames)
+            flowPathIndicator.set(chatId, "16")
+        } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
+            flowPathIndicator.set(chatId, "21")
+        } else {
+            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+        }
+
     } catch (err) {
         logger.error(`Error from twitter user names handler, ${languageChooser(chatId).somethingWentWrong}`);
         clearFlags(chatId)
     }
 }
 
+
+exports.firstTwitterUserHandler = async(chatId, message) => {
+    try {
+        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+            await sendMessageWithOneButton(chatId, languageChooser(chatId).askForSecondTwitterUser)
+            flowPathIndicator.set(chatId, "17")
+        } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
+            flowPathIndicator.set(chatId, "21")
+        } else {
+            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+        }
+    } catch (err) {
+        logger.error(`Error from second telegram usernames handler, ${languageChooser(chatId).somethingWentWrong}`);
+        clearFlags(chatId)
+    }
+
+}
+exports.secondTwitterUserHandler = async(chatId, message) => {
+    try {
+        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+            await sendMessageWithOneButton(chatId, languageChooser(chatId).askForThirdTwitterUser)
+            flowPathIndicator.set(chatId, "18")
+        } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
+            flowPathIndicator.set(chatId, "21")
+        } else {
+            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+        }
+    } catch (err) {
+        logger.error(`Error from second telegram usernames handler, ${languageChooser(chatId).somethingWentWrong}`);
+        clearFlags(chatId)
+    }
+
+}
+exports.thirdTwitterUserHandler = async(chatId, message) => {
+    try {
+        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+            await sendMessageWithOneButton(chatId, languageChooser(chatId).askForForthTwitterUser)
+            flowPathIndicator.set(chatId, "19")
+        } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
+            flowPathIndicator.set(chatId, "21")
+        } else {
+            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+        }
+    } catch (err) {
+        logger.error(`Error from second telegram usernames handler, ${languageChooser(chatId).somethingWentWrong}`);
+        clearFlags(chatId)
+    }
+
+}
+exports.forthTwitterUserHandler = async(chatId, message) => {
+    try {
+        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+            await sendMessageWithOneButton(chatId, languageChooser(chatId).askForFifthTwitterUser)
+            flowPathIndicator.set(chatId, "20")
+        } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
+            flowPathIndicator.set(chatId, "21")
+        } else {
+            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+        }
+    } catch (err) {
+        logger.error(`Error from second telegram usernames handler, ${languageChooser(chatId).somethingWentWrong}`);
+        clearFlags(chatId)
+    }
+
+}
+
 exports.walletAddressHandler = async(chatId, message) => {
     try {
-        await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
-        flowPathIndicator.set(chatId, "13");
+        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+            await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
+            flowPathIndicator.set(chatId, "21");
+        } else {
+            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+
+        }
+
     } catch (err) {
         logger.error(`Error from wallet address handler, ${languageChooser(chatId).somethingWentWrong}`);
         clearFlags(chatId)

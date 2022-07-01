@@ -124,7 +124,38 @@ exports.sendMessageWith3options = async(chatId, message) => {
     }
 }
 
-exports.sendMessageWith2Buttons = async(chatID, message, data) => {
+exports.sendMessageWithOneButton = async(chatID, message, text, data) => {
+    try {
+        const res = await axios({
+            url: `${TELEGRAM_API}${TOKEN}/sendMessage`,
+            method: 'post',
+            params: {
+                chat_id: chatID,
+                text: message,
+                reply_markup: {
+                    keyboard: [
+                        [
+                            { text: "SKIP THE TASK" }
+                        ],
+
+                    ],
+                    resize_keyboard: true,
+                    one_time_keyboard: true,
+
+                },
+
+
+            }
+        })
+        return res.data
+
+    } catch (err) {
+        logger.error(`Error from send message with one button,${JSON.stringify(err.response.data)}`);
+        return err.response.data
+    }
+}
+
+exports.sendMessageWith2Buttons = async(chatID, message) => {
     try {
         chatID = chatID.toString();
         const res = await axios({
@@ -136,10 +167,10 @@ exports.sendMessageWith2Buttons = async(chatID, message, data) => {
                 reply_markup: {
                     keyboard: [
                         [
-                            { text: "SKIP THE TASK", callback_data: data }
+                            { text: "SKIP THE TASK" }
                         ],
                         [
-                            { text: "ENTER YOUR WALLET ADDRESS", callback_data: "wallet_address" }
+                            { text: "ENTER YOUR WALLET ADDRESS" }
                         ]
                     ],
                     resize_keyboard: true,
