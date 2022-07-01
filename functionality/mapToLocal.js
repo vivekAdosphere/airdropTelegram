@@ -33,8 +33,10 @@ class MapToLocal {
     }
 
     get(key) {
+        // console.log(db.has(this.dbKey))
         if (db.has(this.dbKey)) { //Existing
             const createNewMap = new Map(Object.entries(db.get(this.dbKey)));
+            // console.log(createNewMap.get(key))
             return createNewMap.get(key);
         } else {
             return undefined;

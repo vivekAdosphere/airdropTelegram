@@ -12,7 +12,7 @@ const app = express();
 const PORT = config.PORT;
 const { sendMessage } = require("./functionality/messageSender")
 const languageChooser = require("./language/languageChooser")
-const { handleTextMessage } = require("./controllers/messageHandler")
+const { handleTextMessage, handleCallback_query } = require("./controllers/messageHandler")
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -23,22 +23,32 @@ const init = async() => {
 }
 
 app.post(URI, async(req, res) => {
+    console.log(req.body)
 
-    const msg = req.body.message.text;
-    const chat_id = req.body.message.chat.id;
-    exports.firstName = req.body.message.chat.first_name;
-    if (msg) {
-        handleTextMessage(chat_id, msg)
-        res.status(200).end();
+    // TEXT MESSAGE
+    // ["updated_id", "message"]
+    if (req.body.message) {
+        const { first_name: firstName, id: chat_id } = req.body.message.from
+
+        handleTextMessage(chat_id, req.body.message.text, firstName)
+
+
     }
-    console.log(req.body);
-    return res.send();
+    // REPLY MARKUP BUTTON
+    // ["updated_id", "callback_query"]
+    else if (req.body.callback_query) {
+        const { id: chat_id } = req.body.callback_query.from;
+        console.log("In callback handler")
+        handleCallback_query(chat_id, req.body.callback_query.data)
+    }
+
+    res.status(200).end();
 
 });
 
 
 
-app.listen(PORT, () => {
+app.listen(PORT, async() => {
     console.log(`Server is running at ${PORT}`)
-    init()
+    await init()
 })

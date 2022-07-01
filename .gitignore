@@ -1,0 +1,4 @@
+node_modules
+croxydb
+.env
+*.log
