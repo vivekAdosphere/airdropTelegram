@@ -35,14 +35,14 @@ module.exports = {
 
     wrongAnswer: "❌ Try again",
     wrongAnswerForTwitter: "❌ Try again\n\nPlease enter in correct Format\n\n✍️For example: https://twitter.com/TheAmazeWorld",
-    invalidEmail: "❌Please Enter Valid Email Address",
-    invalidTwitterProfile: "❌ Wrong Twitter URL",
-    invalidReddit: "❌ Wrong Reddit URL",
-    invalidDiscordUsername: "❌ Wrong Discord Username",
-    invalidFacebookUsername: "❌ Wrong Facebook Username",
-    invalidInstagramUsername: "❌ Wrong Instagram Username",
-    invalidWalletAddress: "❌ Invalid Wallet Address",
-    invalidDiscordInvitationLink: "❌ Wrong Discord Invitation Link",
+    invalidEmail: "❌Please Enter valid Email Address",
+    invalidTwitterProfile: "❌ Enter a valid Twitter URL",
+    invalidReddit: "❌ Enter a valid Reddit URL",
+    invalidDiscordUsername: "❌ Enter a valid Discord Username",
+    invalidFacebookUsername: "❌ Enter a valid Facebook Username",
+    invalidInstagramUsername: "❌ Enter a valid Instagram Username",
+    invalidWalletAddress: "❌ Enter a valid Wallet Address",
+    invalidDiscordInvitationLink: "❌ Enter a valid Discord Invitation Link",
 
 
 
