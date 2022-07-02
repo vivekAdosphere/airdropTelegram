@@ -50,7 +50,7 @@ exports.startHandler = async(chatId) => {
 
         await initDefaultValues(chatId, "1");
 
-        await sendMessage(chatId, `${languageChooser(chatId).welcomeMessage}: ${generateOneRandom(chatId)} + ${generateTwoRandom(chatId)} =`);
+        await sendMessage(chatId, `${languageChooser(chatId).welcomeMessage}: ${generateOneRandom(chatId)} + ${generateTwoRandom(chatId)} `);
         // console.log(captcha())
 
     } catch (err) {
@@ -228,6 +228,8 @@ exports.firstTelegramUserHandler = async(chatId, message) => {
             flowPathIndicator.set(chatId, "11")
         } else if (message === "SKIP THE TASK") {
             await sendMessageWith2Buttons(chatId, languageChooser(chatId).askForTwitterUserNames)
+            await sendMessage(chatId, languageChooser(chatId).askForFirstTwitterUser)
+
             flowPathIndicator.set(chatId, "15")
         } else {
             await sendMessage(chatId, languageChooser(chatId).wrongAnswer)

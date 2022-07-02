@@ -13,7 +13,9 @@ exports.sendMessage = async(chatId, message) => {
             params: {
                 chat_id: chatId,
                 text: message,
-            }
+                parse_mode: "HTML"
+            },
+
         })
         return res.data
 
@@ -33,6 +35,7 @@ exports.sendMessageWithInlineKeyboard = async(chatId, message) => {
             params: {
                 chat_id: chatId,
                 text: message,
+                parse_mode: "HTML",
                 reply_markup: {
                     inline_keyboard: [
                         [
@@ -65,7 +68,8 @@ exports.sendMessageWithInlineKeyboard = async(chatId, message) => {
         })
         return res.data
     } catch (err) {
-        logger.error(`Error from Send Message with inline keyboard,${JSON.stringify(err.response)}`);
+        // logger.error(`Error from Send Message with inline keyboard,${JSON.stringify(err.response)}`);
+        console.log(err.message)
         return err.response.data
     }
 }
@@ -77,7 +81,8 @@ exports.checkChannelMemberStatus = async(chatID, userID, type = "group") => {
             url: `${TELEGRAM_API}${TOKEN}/${type==="group" ? "getChatMember" : ""}`,
             params: {
                 chat_id: chatID,
-                user_id: userID
+                user_id: userID,
+                parse_mode: "HTML"
             }
         })
         console.log(res.data)
@@ -99,6 +104,7 @@ exports.sendMessageWith3options = async(chatId, message) => {
             params: {
                 chat_id: chatId,
                 text: message,
+                parse_mode: "HTML",
                 reply_markup: {
                     inline_keyboard: [
                         [
@@ -129,6 +135,7 @@ exports.sendMessageWithOneButton = async(chatID, message, text, data) => {
             params: {
                 chat_id: chatID,
                 text: message,
+                parse_mode: "HTML",
                 reply_markup: {
                     keyboard: [
 
@@ -163,6 +170,7 @@ exports.sendMessageWith2Buttons = async(chatID, message) => {
             params: {
                 chat_id: chatID,
                 text: message,
+                parse_mode: "HTML",
                 reply_markup: {
                     keyboard: [
                         [

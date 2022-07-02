@@ -1,28 +1,28 @@
 module.exports = {
-    welcomeMessage: "Welcome to our community,  please first prove to me that you are a human by solving this simple math task : ",
+    welcomeMessage: "Welcome to our community,  please first prove to me that you are a human by solving this simple math task ",
 
     taskList: `🏆Please perform the tasks below to win up to $1200 worth AMZEs.
 
 
-🔵 MANDATORY TASKS
+<b>🔵 MANDATORY TASKS</b>
     
-🔸 Join our Telegram Channel and Telegram Group. 
-🔸 Follow our tg://msg_url?url=https://www.google.com/&text={text}, Like and Retweet the pinned post by tagging 3 of your friends. 
-🔸 Join our Reddit Community and upvote the pinned post. 
-🔸 Join our Discord Server.
+🔸 Join our <a href="https://t.me/theamazeworld/">Telegram Channel</a> and <a href="https://t.me/amazew/">Telegram Group</a>. 
+🔸 Follow our <a href="https://twitter.com/TheAmazeWorld/">Twitter</a>, Like and Retweet the pinned post by tagging 3 of your friends. 
+🔸 Join our <a href="https://www.reddit.com/r/global_amazeworld/">Reddit Community</a> and upvote the pinned post. 
+🔸 Join our <a href="https://discord.gg/nbRvq7VbJ7/">Discord Server</a>.
 
-🔵 OPTIONAL TASKS
+<b>🔵 OPTIONAL TASKS</b>
 
-🔸 Follow our Facebook Page and Instagram Account. 
-🔸 Invite 5 Members to our Discord Server with invite link. 
+🔸 Follow our <a href="https://www.facebook.com/amazeworldglobal">Facebook Page</a> and <a href="https://www.instagram.com/amazeworldglobal/">Instagram Account</a>. 
+🔸 Invite 5 Members to our <a href="https://discord.gg/nbRvq7VbJ7">Discord Server</a> with invite link. 
 
-🔵 REFERRAL TASKS
+<b>🔵 REFERRAL TASKS</b>
 
-🔸 Invite 5 Members to Telegram Channel and Group. 
-🔸 Invite 5 Members to Twitter Handle. 
+🔸 Invite 5 Members to <a href="https://t.me/theamazeworld/">Telegram Channel</a> and <a href="https://t.me/amazew/">Group</a>. 
+🔸 Invite 5 Members to <a href="https://twitter.com/TheAmazeWorld/">Twitter</a> Handle. 
     
     
-🏆🏆🏆Rewards🏆🏆🏆
+<b>🏆🏆🏆Rewards🏆🏆🏆</b>
 
 ✍️ By Performing Mandatory Tasks you will win AMZEs worth up to $800
 
@@ -49,31 +49,31 @@ module.exports = {
 
 
     //mandatory task
-    dothisFirst: "⚠️ Please first complete the mandatory Telegram Group and Telegram channel tasks.",
+    dothisFirst: `⚠️ Please first complete the mandatory <a href="https://t.me/amazew/">Telegram Group</a> and <a href="https://t.me/theamazeworld/">Telegram channel</a> tasks.`,
 
     //inputs
     askForEmail: "👍 Great! Please enter your E-mail address.",
 
     //twitter profile
-    askForTwitterProfile: `👍 Thank you. Please submit your Twitter profile link, with which you have participated in the Twitter task. 
+    askForTwitterProfile: `👍 Thank you. Please submit your <a href="https://twitter.com/TheAmazeWorld">Twitter</a> profile link, with which you have participated in the Twitter task. 
   
     ✍️ For example: https://twitter.com/TheAmazeWorld
     `,
 
     //reddit profile
-    askForReddit: `👽 Please submit your Reddit (https://Reddit.com/Da3b8h9cQT) username with which you have participated in the Reddit task. 
+    askForReddit: `👽 Please submit your <a href="https://Reddit.com/Da3b8h9cQT">Reddit</a>) username with which you have participated in the Reddit task. 
 
     ✍️ For example: https://www.reddit.com/user/AmazeWorldGlobal/
     `,
 
     //discord user name
-    askForDiscordUserName: `🎧 Please submit your Discord (https://discord.gg/nbRvq7VbJ7) username with which you have participated in the Discord task. 
+    askForDiscordUserName: `🎧 Please submit your <a href="https://discord.gg/nbRvq7VbJ7">Discord</a> username with which you have participated in the Discord task. 
 
     ✍️ For example: username#1234
     `,
 
     //facebook profile
-    askForFacebookProfileLink: `🟦 Please submit your Facebook Profile URL, with which you have participated in the Facebook task. 
+    askForFacebookProfileLink: `🟦 Please submit your <a href="https://www.facebook.com/amazeworld">Facebook</a> Profile URL, with which you have participated in the Facebook task. 
 
     ✍️ For example: https://www.facebook.com/amazeworld
     
@@ -81,7 +81,7 @@ module.exports = {
     `,
 
     //instagram profile
-    askForInstagramProfileLink: `🟥 Please submit your Instagram Profile URL, with which you have participated in the Instagram task.
+    askForInstagramProfileLink: `🟥 Please submit your <a href="https://www.instagram.com/amazeworld">Instagram</a> Profile URL, with which you have participated in the Instagram task.
 
     ✍️ For example: https://www.instagram.com/amazeworld
     
@@ -89,16 +89,16 @@ module.exports = {
     `,
 
 
-    askForDiscordInvitationLink: `🤖 Please submit your Discord Invitation URL, with which you have invited users to Amaze World’s Discord Server.
+    askForDiscordInvitationLink: `🤖 Please submit your <a href="https://discord.gg/nbRvq7VbJ7">Discord</a> Invitation URL, with which you have invited users to Amaze World’s Discord Server.
 
     ✍️ For example: https://discord.gg/nbRvq7VbJ7`,
-    askForTelegramUserNames: `🟦 Enter Telegram Username of the accounts that you have invited on Telegram Group.
+    askForTelegramUserNames: `🟦 Enter <a href="https://t.me/amazew/">Telegram</a> Username of the accounts that you have invited on Telegram Group.
 
 ✍️ For example: @amazeworld
     
 🔘 If you haven't participated in the Referral task, please click the Skip button.
     `,
-    askForTwitterUserNames: `🟦 Enter Profile URLs of the accounts that you have invited on Twitter.
+    askForTwitterUserNames: `🟦 Enter Profile URLs of the accounts that you have invited on <a href="https://twitter.com/TheAmazeWorld">Twitter</a>.
 
 ✍️ For example: https://twitter.com/TheAmazeWorld
     
