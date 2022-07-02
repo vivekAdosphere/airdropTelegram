@@ -65,7 +65,7 @@ exports.answerHandler = async(chatId, message, firstName) => {
 
     try {
         if (message == captcha(userData.get(chatId).num1, userData.get(chatId).num2)) {
-            sendMessageWithInlineKeyboard(chatId, `👍 That 's correct, ${firstName}\n` + languageChooser(chatId).taskList)
+            sendMessageWithInlineKeyboard(chatId, `👍 That 's correct, <b>${firstName}</b>\n` + languageChooser(chatId).taskList)
             flowPathIndicator.set(chatId, "2")
 
         } else {

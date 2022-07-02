@@ -61,7 +61,7 @@ module.exports = {
     `,
 
     //reddit profile
-    askForReddit: `👽 Please submit your <a href="https://Reddit.com/Da3b8h9cQT">Reddit</a>) username with which you have participated in the Reddit task. 
+    askForReddit: `👽 Please submit your <a href="https://Reddit.com/Da3b8h9cQT">Reddit</a> username with which you have participated in the Reddit task. 
 
     ✍️ For example: https://www.reddit.com/user/AmazeWorldGlobal/
     `,
