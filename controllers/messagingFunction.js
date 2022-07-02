@@ -24,14 +24,14 @@ let initDefaultValues = (chatId, index) => {
 }
 
 function generateOneRandom(chatId) {
-    var num1 = Math.ceil(50 * Math.random(0, 50));
+    var num1 = Math.ceil(50 * Math.random(0, 20));
     console.log("num1 : " + num1)
     userDataFlagHandler(chatId, "num1", num1)
     return num1
 }
 
 function generateTwoRandom(chatId) {
-    var num2 = Math.ceil(50 * Math.random(0, 50));
+    var num2 = Math.ceil(50 * Math.random(0, 40));
     console.log("num1 : " + num2)
     userDataFlagHandler(chatId, "num2", num2)
     return num2
@@ -98,7 +98,8 @@ exports.twitterProfileHandler = async(chatId, message) => {
             await sendMessage(chatId, languageChooser(chatId).askForTwitterProfile);
             flowPathIndicator.set(chatId, "4")
         } else {
-            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+            //wrong email address
+            await sendMessage(chatId, languageChooser(chatId).invalidEmail)
         }
 
 
@@ -108,28 +109,15 @@ exports.twitterProfileHandler = async(chatId, message) => {
     }
 }
 
-exports.retweetProfileHandler = async(chatId, message) => {
-    try {
-        if (await urlVerifier(message, "twitter")) {
-            await sendMessage(chatId, languageChooser(chatId).askForRetweetPostLink)
-            flowPathIndicator.set(chatId, "5")
-        } else {
-            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
-        }
-    } catch (err) {
-
-    }
-}
-
-
 exports.redditProfileHandler = async(chatId, message) => {
     try {
-        console.log(await urlVerifier(message, "twitter"))
+
         if (await urlVerifier(message, "twitter")) {
             await sendMessage(chatId, languageChooser(chatId).askForReddit)
-            flowPathIndicator.set(chatId, "6")
+            flowPathIndicator.set(chatId, "5")
         } else {
-            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+            //wrong twitter profile link
+            await sendMessage(chatId, languageChooser(chatId).invalidTwitterProfile)
         }
 
 
@@ -143,9 +131,10 @@ exports.discordUsernameHandler = async(chatId, message) => {
     try {
         if (await urlVerifier(message, "reddit")) {
             await sendMessage(chatId, languageChooser(chatId).askForDiscordUserName)
-            flowPathIndicator.set(chatId, "7")
+            flowPathIndicator.set(chatId, "6")
         } else {
-            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+            //wrong reddit profile 
+            await sendMessage(chatId, languageChooser(chatId).invalidReddit)
         }
 
 
@@ -159,9 +148,10 @@ exports.facebookProfileHandler = async(chatId, message) => {
     try {
         if (message.match(/\w+#\d{4}/i)) {
             await sendMessageWith2Buttons(chatId, languageChooser(chatId).askForFacebookProfileLink);
-            flowPathIndicator.set(chatId, "8")
+            flowPathIndicator.set(chatId, "7")
         } else {
-            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+            //wrong discord username
+            await sendMessage(chatId, languageChooser(chatId).invalidDiscordUsername)
         }
 
     } catch (err) {
@@ -173,13 +163,15 @@ exports.instagramProfileHandler = async(chatId, message) => {
     try {
         if (await urlVerifier(message, "facebook") || message === "SKIP THE TASK") {
             await sendMessageWith2Buttons(chatId, languageChooser(chatId).askForInstagramProfileLink);
-            flowPathIndicator.set(chatId, "9")
+            flowPathIndicator.set(chatId, "8")
 
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
             await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
-            flowPathIndicator.set(chatId, "21")
+            flowPathIndicator.set(chatId, "20")
         } else {
-            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+
+            //wrong facebook profile link
+            await sendMessage(chatId, languageChooser(chatId).invalidFacebookUsername)
         }
 
     } catch (err) {
@@ -193,12 +185,14 @@ exports.discordInvitationHandler = async(chatId, message) => {
     try {
         if (await urlVerifier(message, "instagram") || message === "SKIP THE TASK") {
             await sendMessageWith2Buttons(chatId, languageChooser(chatId).askForDiscordInvitationLink)
-            flowPathIndicator.set(chatId, "10")
+            flowPathIndicator.set(chatId, "9")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
             await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
-            flowPathIndicator.set(chatId, "21")
+            flowPathIndicator.set(chatId, "20")
         } else {
-            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+
+            //wrong instagram username
+            await sendMessage(chatId, languageChooser(chatId).invalidInstagramUsername)
         }
 
 
@@ -211,13 +205,14 @@ exports.discordInvitationHandler = async(chatId, message) => {
 exports.telegramUsernamesHandler = async(chatId, message) => {
     try {
         if (await urlVerifier(message, "discord") || message === "SKIP THE TASK") {
-            await sendMessageWithOneButton(chatId, languageChooser(chatId).askForTelegramUserNames, "Submit First user name", "firstTelegram");
-            flowPathIndicator.set(chatId, "11");
+            await sendMessageWith2Buttons(chatId, languageChooser(chatId).askForTelegramUserNames);
+            await sendMessage(chatId, languageChooser(chatId).askForFirstUserName)
+            flowPathIndicator.set(chatId, "10");
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
             await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
-            flowPathIndicator.set(chatId, "21")
+            flowPathIndicator.set(chatId, "20")
         } else {
-            await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
+            await sendMessage(chatId, languageChooser(chatId).invalidDiscordInvitationLink)
         }
 
     } catch (err) {
@@ -228,12 +223,12 @@ exports.telegramUsernamesHandler = async(chatId, message) => {
 
 exports.firstTelegramUserHandler = async(chatId, message) => {
     try {
-        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+        if (message.startsWith("@")) {
             await sendMessageWithOneButton(chatId, languageChooser(chatId).askForSecondUserName)
-            flowPathIndicator.set(chatId, "12")
-        } else if (message === "ENTER YOUR WALLET ADDRESS") {
-            await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
-            flowPathIndicator.set(chatId, "21")
+            flowPathIndicator.set(chatId, "11")
+        } else if (message === "SKIP THE TASK") {
+            await sendMessageWith2Buttons(chatId, languageChooser(chatId).askForTwitterUserNames)
+            flowPathIndicator.set(chatId, "15")
         } else {
             await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
         }
@@ -245,12 +240,12 @@ exports.firstTelegramUserHandler = async(chatId, message) => {
 
 exports.secondTelegramUserHandler = async(chatId, message) => {
     try {
-        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+        if (message.startsWith("@")) {
             await sendMessageWithOneButton(chatId, languageChooser(chatId).askForThirdUserName)
-            flowPathIndicator.set(chatId, "13")
+            flowPathIndicator.set(chatId, "12")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
             await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
-            flowPathIndicator.set(chatId, "21")
+            flowPathIndicator.set(chatId, "20")
         } else {
             await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
         }
@@ -263,12 +258,12 @@ exports.secondTelegramUserHandler = async(chatId, message) => {
 
 exports.thirdTelegramUserHandler = async(chatId, message) => {
     try {
-        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+        if (message.startsWith("@")) {
             await sendMessageWithOneButton(chatId, languageChooser(chatId).askForForthUserName)
-            flowPathIndicator.set(chatId, "14")
+            flowPathIndicator.set(chatId, "13")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
             await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
-            flowPathIndicator.set(chatId, "21")
+            flowPathIndicator.set(chatId, "20")
         } else {
             await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
         }
@@ -280,12 +275,12 @@ exports.thirdTelegramUserHandler = async(chatId, message) => {
 }
 exports.forthTelegramUserHandler = async(chatId, message) => {
     try {
-        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+        if (message.startsWith("@")) {
             await sendMessageWithOneButton(chatId, languageChooser(chatId).askForFifthUserName)
-            flowPathIndicator.set(chatId, "15")
+            flowPathIndicator.set(chatId, "14")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
             await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
-            flowPathIndicator.set(chatId, "21")
+            flowPathIndicator.set(chatId, "20")
         } else {
             await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
         }
@@ -298,12 +293,13 @@ exports.forthTelegramUserHandler = async(chatId, message) => {
 
 exports.twitterUsernamesHandler = async(chatId, message) => {
     try {
-        if (validate.isAlphabetic(message)) {
-            await sendMessageWithOneButton(chatId, languageChooser(chatId).askForTwitterUserNames)
-            flowPathIndicator.set(chatId, "16")
+        if (message.startsWith("@")) {
+            await sendMessageWith2Buttons(chatId, languageChooser(chatId).askForTwitterUserNames)
+            await sendMessage(chatId, languageChooser(chatId).askForFirstTwitterUser)
+            flowPathIndicator.set(chatId, "15")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
             await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
-            flowPathIndicator.set(chatId, "21")
+            flowPathIndicator.set(chatId, "20")
         } else {
             await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
         }
@@ -317,12 +313,12 @@ exports.twitterUsernamesHandler = async(chatId, message) => {
 
 exports.firstTwitterUserHandler = async(chatId, message) => {
     try {
-        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+        if (await urlVerifier(message, "twitter")) {
             await sendMessageWithOneButton(chatId, languageChooser(chatId).askForSecondTwitterUser)
-            flowPathIndicator.set(chatId, "17")
-        } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            flowPathIndicator.set(chatId, "16")
+        } else if (message === "ENTER YOUR WALLET ADDRESS" || message === "SKIP THE TASK") {
             await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
-            flowPathIndicator.set(chatId, "21")
+            flowPathIndicator.set(chatId, "20")
         } else {
             await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
         }
@@ -334,12 +330,12 @@ exports.firstTwitterUserHandler = async(chatId, message) => {
 }
 exports.secondTwitterUserHandler = async(chatId, message) => {
     try {
-        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+        if (await urlVerifier(message, "twitter")) {
             await sendMessageWithOneButton(chatId, languageChooser(chatId).askForThirdTwitterUser)
-            flowPathIndicator.set(chatId, "18")
+            flowPathIndicator.set(chatId, "17")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
             await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
-            flowPathIndicator.set(chatId, "21")
+            flowPathIndicator.set(chatId, "20")
         } else {
             await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
         }
@@ -351,12 +347,12 @@ exports.secondTwitterUserHandler = async(chatId, message) => {
 }
 exports.thirdTwitterUserHandler = async(chatId, message) => {
     try {
-        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+        if (await urlVerifier(message, "twitter")) {
             await sendMessageWithOneButton(chatId, languageChooser(chatId).askForForthTwitterUser)
-            flowPathIndicator.set(chatId, "19")
+            flowPathIndicator.set(chatId, "18")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
             await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
-            flowPathIndicator.set(chatId, "21")
+            flowPathIndicator.set(chatId, "20")
         } else {
             await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
         }
@@ -368,12 +364,12 @@ exports.thirdTwitterUserHandler = async(chatId, message) => {
 }
 exports.forthTwitterUserHandler = async(chatId, message) => {
     try {
-        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+        if (await urlVerifier(message, "twitter")) {
             await sendMessageWithOneButton(chatId, languageChooser(chatId).askForFifthTwitterUser)
-            flowPathIndicator.set(chatId, "20")
+            flowPathIndicator.set(chatId, "19")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
             await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
-            flowPathIndicator.set(chatId, "21")
+            flowPathIndicator.set(chatId, "20")
         } else {
             await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
         }
@@ -386,9 +382,9 @@ exports.forthTwitterUserHandler = async(chatId, message) => {
 
 exports.walletAddressHandler = async(chatId, message) => {
     try {
-        if (validate.isAlphabetic(message) || message === "SKIP THE TASK") {
+        if (await urlVerifier(message, "twitter")) {
             await sendMessage(chatId, languageChooser(chatId).askForWalletAddress);
-            flowPathIndicator.set(chatId, "21");
+            flowPathIndicator.set(chatId, "20");
         } else {
             await sendMessage(chatId, languageChooser(chatId).wrongAnswer)
 

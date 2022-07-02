@@ -36,28 +36,25 @@ exports.sendMessageWithInlineKeyboard = async(chatId, message) => {
                 reply_markup: {
                     inline_keyboard: [
                         [
-                            { text: "Join our Telegram group(Mandatory)", url: "https://t.me/MultiFinance_chat", callback_data: 'telegram_group' }
+                            { text: "Join our Telegram group(Mandatory)", url: "https://t.me/amazew", callback_data: 'telegram_group' }
                         ],
                         [
-                            { text: "Join our Telegram channel(Mandatory)", url: "https://t.me/MultiFinance_channel", callback_data: 'telegram_channel' }
+                            { text: "Join our Telegram channel(Mandatory)", url: "https://t.me/theamazeworld", callback_data: 'telegram_channel' }
                         ],
                         [
-                            { text: "Follow our Twitter,like and retweet the pinned post(Mandatory)", url: "https://twitter.com/MultiFiProtocol" }
+                            { text: "Follow our Twitter,like and retweet the pinned post(Optional)", url: "https://twitter.com/TheAmazeWorld" }
                         ],
                         [
-                            { text: "Follow our Medium(Optional)", url: "https://medium.com/@MultiFiProtocol" }
+                            { text: "Join our Reddit Community(Optional)", url: "https://www.reddit.com/r/global_amazeworld/" }
                         ],
                         [
-                            { text: "Follow our Reddit(Optional)", url: "https://reddit.com/u/MultiFinance" }
+                            { text: "Join our Discord Server(Optional)", url: "https://discord.gg/nbRvq7VbJ7" }
                         ],
                         [
-                            { text: "Join our Discord(Optional)", url: "https://discord.gg/PQSxynESEn" }
+                            { text: "Follow our Facebook page(Optional)", url: "https://www.facebook.com/amazeworldglobal" }
                         ],
                         [
-                            { text: "Follow Airdrop Detective Twitter,like and retweet the post about the Multi Finance Airdrop. (Optional)", url: "http://www.twitter.com/AirdropDet" }
-                        ],
-                        [
-                            { text: " Join Airdrop Detective Telegram(Optional)", url: "https://t.me/AirdropDetective" }
+                            { text: "Follow our Instagram page(Optional)", url: "https://www.instagram.com/amazeworldglobal/" }
                         ],
                         [
                             { text: "Submit your details", callback_data: "user_detail" }
@@ -84,7 +81,7 @@ exports.checkChannelMemberStatus = async(chatID, userID, type = "group") => {
             }
         })
         console.log(res.data)
-        return res.data.result.status === "member" ? true : false
+        return res.data.result.status === "member" || "administrator" ? true : false
 
     } catch (err) {
         logger.error(`Error from check channel member status,${JSON.stringify(err.response.data)}`);
@@ -105,10 +102,10 @@ exports.sendMessageWith3options = async(chatId, message) => {
                 reply_markup: {
                     inline_keyboard: [
                         [
-                            { text: "Join our Telegram group(Mandatory)", url: "https://t.me/MultiFinance_chat" }
+                            { text: "Join our Telegram group(Mandatory)", url: "https://t.me/amazew" }
                         ],
                         [
-                            { text: "Join our Telegram channel(Mandatory)", url: "https://t.me/MultiFinance_channel" }
+                            { text: "Join our Telegram channel(Mandatory)", url: "https://t.me/theamazeworld" }
                         ],
                         [
                             { text: "Submit your details", callback_data: "user_detail" }
@@ -134,9 +131,10 @@ exports.sendMessageWithOneButton = async(chatID, message, text, data) => {
                 text: message,
                 reply_markup: {
                     keyboard: [
+
                         [
-                            { text: "SKIP THE TASK" }
-                        ],
+                            { text: "ENTER YOUR WALLET ADDRESS" }
+                        ]
 
                     ],
                     resize_keyboard: true,
@@ -154,6 +152,7 @@ exports.sendMessageWithOneButton = async(chatID, message, text, data) => {
         return err.response.data
     }
 }
+
 
 exports.sendMessageWith2Buttons = async(chatID, message) => {
     try {

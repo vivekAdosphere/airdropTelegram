@@ -66,11 +66,14 @@ exports.urlVerifier = async(url, socialMedia) => {
                         isValidPathname = true
                         break
                     case "reddit":
-                        isValidPathname = pathName.includes("/u/")
+                        isValidPathname = pathName.includes("/u/") || pathName.includes("/user/") || pathName.includes("/r/")
                         break
                     case "facebook":
+                        if (url.match(/(?:https?:\/\/)?(?:www\.)?(?:facebook|fb|m\.facebook)\.(?:com|me)\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-\.]+)(?:\/)?/i)) {
+                            isValidPathname = true
+                        }
                         // console.log(searchParams.has("id"), typeof searchParams)
-                        isValidPathname = pathName.includes("/profile") && searchParams.has("id")
+                        // isValidPathname = (pathName.includes("/profile") && searchParams.has("id")) || pathName.match(/^[a-z\d.]{5,}$/i)
                         break
                     case "twitter":
                         isValidPathname = true
@@ -78,6 +81,11 @@ exports.urlVerifier = async(url, socialMedia) => {
                     case "discord":
                         isValidPathname = true
                         break
+                    case "telegram":
+                        if (url.match(/^(?:|(https?:\/\/)?(|www)[.]?((t|telegram)\.me)\/)[a-zA-Z0-9_]{5,32}$/gm)) {
+                            isValidPathname = true
+
+                        }
                 }
             }
 

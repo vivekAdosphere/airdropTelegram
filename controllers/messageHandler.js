@@ -3,8 +3,35 @@ const logger = require("../functionality/logger");
 const { MapToLocal } = require("../functionality/mapToLocal");
 const { clearFlags } = require("../functionality/utilities");
 const languageChooser = require("../language/languageChooser");
-const { sendMessage, checkChannelMemberStatus, sendMessageWith3options, sendMessageWithInlineKeyboard } = require("../functionality/messageSender");
-const { startHandler, answerHandler, emailHandler, twitterProfileHandler, redditProfileHandler, discordUsernameHandler, facebookProfileHandler, instagramProfileHandler, discordInvitationHandler, telegramUsernamesHandler, twitterUsernamesHandler, walletAddressHandler, thankYouHandler, retweetProfileHandler, firstTelegramUserHandler, secondTelegramUserHandler, thirdTelegramUserHandler, forthTelegramUserHandler, secondTwitterUserHandler, firstTwitterUserHandler, thirdTwitterUserHandler, forthTwitterUserHandler, } = require("../controllers/messagingFunction")
+const {
+    sendMessage,
+    checkChannelMemberStatus,
+    sendMessageWith3options,
+    sendMessageWithInlineKeyboard
+} = require("../functionality/messageSender");
+const {
+    startHandler,
+    answerHandler,
+    emailHandler,
+    twitterProfileHandler,
+    redditProfileHandler,
+    discordUsernameHandler,
+    facebookProfileHandler,
+    instagramProfileHandler,
+    discordInvitationHandler,
+    telegramUsernamesHandler,
+    twitterUsernamesHandler,
+    walletAddressHandler,
+    thankYouHandler,
+    firstTelegramUserHandler,
+    secondTelegramUserHandler,
+    thirdTelegramUserHandler,
+    forthTelegramUserHandler,
+    secondTwitterUserHandler,
+    firstTwitterUserHandler,
+    thirdTwitterUserHandler,
+    forthTwitterUserHandler,
+} = require("../controllers/messagingFunction")
 
 const flowPathIndicator = new MapToLocal(mapNames.flowPathIndicator);
 const selectedCommunicationLanguage = new MapToLocal(mapNames.selectedCommunicationLanguage);
@@ -28,57 +55,54 @@ exports.handleTextMessage = async(chatId, message, firstName) => {
                     twitterProfileHandler(chatId, message)
                     break
                 case "4":
-                    retweetProfileHandler(chatId, message)
-                    break
-                case "5":
                     redditProfileHandler(chatId, message)
                     break
-                case "6":
+                case "5":
                     discordUsernameHandler(chatId, message)
                     break
-                case "7":
+                case "6":
                     facebookProfileHandler(chatId, message)
                     break
-                case "8":
+                case "7":
                     instagramProfileHandler(chatId, message)
                     break
-                case "9":
+                case "8":
                     discordInvitationHandler(chatId, message)
                     break
-                case "10":
+                case "9":
                     telegramUsernamesHandler(chatId, message)
                     break
-                case "11":
+                case "10":
                     firstTelegramUserHandler(chatId, message)
                     break
-                case "12":
+                case "11":
                     secondTelegramUserHandler(chatId, message)
                     break
-                case "13":
+                case "12":
                     thirdTelegramUserHandler(chatId, message)
                     break
-                case "14":
+                case "13":
                     forthTelegramUserHandler(chatId, message)
                     break
-                case "15":
+                case "14":
                     twitterUsernamesHandler(chatId, message)
                     break
-                case "16":
+                case "15":
                     firstTwitterUserHandler(chatId, message)
                     break
-                case "17":
+                case "16":
                     secondTwitterUserHandler(chatId, message)
                     break
-                case "18":
+                case "17":
                     thirdTwitterUserHandler(chatId, message)
                     break
-                case "19":
+                case "18":
                     forthTwitterUserHandler(chatId, message)
                     break
-                case "20":
+                case "19":
                     walletAddressHandler(chatId, message)
                     break
-                case "21":
+                case "20":
                     thankYouHandler(chatId, message)
                     break
                 default:
@@ -100,7 +124,8 @@ exports.handleCallback_query = async(chatId, callbackData) => {
 
         chatId = chatId.toString()
 
-        const groupId = "@MultiFinance_chat";
+        const groupId = "@amazew";
+        // const channelId = "@amazew";
         if (callbackData) {
             switch (callbackData) {
                 case "user_detail":
@@ -110,18 +135,9 @@ exports.handleCallback_query = async(chatId, callbackData) => {
                         sendMessageWith3options(chatId, languageChooser(chatId).dothisFirst)
                     }
                     break
-                case "facebook_profile":
-                    break
-                case "instagram_profile":
-                    discordInvitationHandler(chatId, message)
-                    break
-                case "discord_invitation":
-                    telegramUsernamesHandler(chatId, message)
-                    break
+
                 default:
                     sendMessage(chatId, languageChooser(chatId).somethingWentWrong)
-
-
 
             }
 
