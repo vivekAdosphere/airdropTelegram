@@ -7,17 +7,21 @@ const selectedCommunicationLanguage = new MapToLocal(mapNames.selectedCommunicat
 const userData = new MapToLocal(mapNames.userData)
 const flowPathIndicator = new MapToLocal(mapNames.flowPathIndicator)
 
-exports.clearFlags = (number) => {
-    if (flowPathIndicator.has(number)) {
-        flowPathIndicator.delete(number)
+exports.clearFlags = async(number) => {
+    // console.log("here")
+    try {
+        if (await flowPathIndicator.has(number)) {
+            await flowPathIndicator.delete(number)
+        }
+        if (await userData.has(number)) {
+            await userData.delete(number);
+        }
+        if (await selectedCommunicationLanguage.has(number)) {
+            await selectedCommunicationLanguage.delete(number)
+        }
+    } catch (err) {
+        throw err
     }
-    if (userData.has(number)) {
-        userData.delete(number);
-    }
-    if (selectedCommunicationLanguage.has(number)) {
-        selectedCommunicationLanguage.delete(number)
-    }
-
 }
 
 exports.getCurrentTime = () => {

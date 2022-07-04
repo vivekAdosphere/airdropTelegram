@@ -34,22 +34,24 @@ const {
 } = require("../controllers/messagingFunction")
 
 const flowPathIndicator = new MapToLocal(mapNames.flowPathIndicator);
-const selectedCommunicationLanguage = new MapToLocal(mapNames.selectedCommunicationLanguage);
 
 exports.handleTextMessage = async(chatId, message, firstName) => {
     try {
-        console.log(flowPathIndicator.get(chatId.toString()))
+
+
+        // console.log(flowPathIndicator.get(chatId.toString()))
         chatId = chatId.toString()
+        const language = await languageChooser(chatId)
 
         if (message === "/start") {
             startHandler(chatId);
-        } else if (flowPathIndicator.has(chatId)) {
-            switch (flowPathIndicator.get(chatId)) {
+        } else if (await flowPathIndicator.has(chatId)) {
+            switch (await flowPathIndicator.get(chatId)) {
                 case "1":
                     answerHandler(chatId, message, firstName)
                     break
                 case "2":
-                    sendMessageWithInlineKeyboard(chatId, languageChooser(chatId).taskList)
+                    sendMessageWithInlineKeyboard(chatId, language.taskList)
                     break
                 case "3":
                     twitterProfileHandler(chatId, message)
@@ -106,23 +108,27 @@ exports.handleTextMessage = async(chatId, message, firstName) => {
                     thankYouHandler(chatId, message)
                     break
                 default:
-                    sendMessage(chatId, languageChooser(chatId).somethingWentWrong)
+                    sendMessage(chatId, language.somethingWentWrong)
             }
         }
 
     } catch (err) {
-        logger.error(`Error from handle text message,${languageChooser(chatId).somethingWentWrong}`)
+        logger.error(`Error from handle text message,${language.somethingWentWrong}`)
         c
-        clearFlags(chatId)
+        clearFlags(chatId).catch(err => {
+            logger.error(`Error,${err.message}`)
+        })
     }
 }
 
 exports.handleCallback_query = async(chatId, callbackData) => {
     try {
-        console.log("UR DATA IS " + callbackData)
-        console.log(chatId)
+        // console.log("UR DATA IS " + callbackData)
+        // console.log(chatId)
 
         chatId = chatId.toString()
+
+        const language = await languageChooser(chatId)
 
         const groupId = "@amazew";
         // const channelId = "@amazew";
@@ -130,14 +136,14 @@ exports.handleCallback_query = async(chatId, callbackData) => {
             switch (callbackData) {
                 case "user_detail":
                     if (await checkChannelMemberStatus(groupId, chatId)) {
-                        emailHandler(chatId, languageChooser(chatId).askForEmail)
+                        emailHandler(chatId, language.askForEmail)
                     } else {
-                        sendMessageWith3options(chatId, languageChooser(chatId).dothisFirst)
+                        sendMessageWith3options(chatId, language.dothisFirst)
                     }
                     break
 
                 default:
-                    sendMessage(chatId, languageChooser(chatId).somethingWentWrong)
+                    sendMessage(chatId, language.somethingWentWrong)
 
             }
 
@@ -146,8 +152,10 @@ exports.handleCallback_query = async(chatId, callbackData) => {
         }
 
     } catch (err) {
-        logger.error(`Error from handle Callback query,${languageChooser(chatId).somethingWentWrong}`)
+        logger.error(`Error from handle Callback query,${language.somethingWentWrong}`)
         console.log(err.message)
-        clearFlags(chatId)
+        clearFlags(chatId).catch(err => {
+            logger.error(`Error,${err.message}`)
+        })
     }
 }
