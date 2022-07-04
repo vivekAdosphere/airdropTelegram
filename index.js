@@ -26,8 +26,8 @@ app.post(URI, async(req, res) => {
     // TEXT MESSAGE
     // ["updated_id", "message"]
     if (req.body.message) {
-        const { first_name: firstName, id: chat_id } = req.body.message.from
-        handleTextMessage(chat_id, req.body.message.text, firstName)
+        const { first_name: firstName, id: chat_id, last_name: lastName } = req.body.message.from
+        handleTextMessage(chat_id, req.body.message.text, firstName, lastName)
     }
     // REPLY MARKUP BUTTON
     // ["updated_id", "callback_query"]

@@ -1,10 +1,17 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const moment = require("moment");
+
+const getCurrentTime = () => {
+    let dateAndTime = moment().utcOffset(330)
+    return dateAndTime.format()
+
+}
 
 const userDetail = new mongoose.Schema({
     chat_id: {
         type: Number,
         required: true,
-        default: nulls
+        default: null
     },
     UserInfo: {
 
@@ -15,7 +22,7 @@ const userDetail = new mongoose.Schema({
         },
         email: {
             type: String,
-            required: true,
+            required: false,
             default: null
         },
         twitter_profile_link: {
@@ -119,6 +126,17 @@ const userDetail = new mongoose.Schema({
         required: true,
         enum: [0, 1, 2, 3],
         default: 0
-
+    },
+    is_joined_telegram_group: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+    is_joined_telegram_channel: {
+        type: Boolean,
+        required: false,
+        default: false
     }
 }, { timestamps: true })
+
+module.exports = mongoose.model("User", userDetail);

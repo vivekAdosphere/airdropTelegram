@@ -35,11 +35,8 @@ const {
 
 const flowPathIndicator = new MapToLocal(mapNames.flowPathIndicator);
 
-exports.handleTextMessage = async(chatId, message, firstName) => {
+exports.handleTextMessage = async(chatId, message, firstName, lastName) => {
     try {
-
-
-        // console.log(flowPathIndicator.get(chatId.toString()))
         chatId = chatId.toString()
         const language = await languageChooser(chatId)
 
@@ -48,7 +45,7 @@ exports.handleTextMessage = async(chatId, message, firstName) => {
         } else if (await flowPathIndicator.has(chatId)) {
             switch (await flowPathIndicator.get(chatId)) {
                 case "1":
-                    answerHandler(chatId, message, firstName)
+                    answerHandler(chatId, message, firstName, lastName)
                     break
                 case "2":
                     sendMessageWithInlineKeyboard(chatId, language.taskList)
