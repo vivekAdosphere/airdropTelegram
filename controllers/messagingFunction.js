@@ -7,7 +7,7 @@ const {
     clearFlags,
     urlVerifier,
 } = require("../functionality/utilities");
-const { saveUserDetail, updateInfo, checkIfUserIsregistered, checkLevelOneDone, checkUserFbProfile, checkUserInstaProfile, checkDiscordInvitation, checkFifthUsersOfTelegram, checkFifthUserOfTwiiter } = require("../functionality/service")
+const { saveUserDetail, updateInfo, checkIfUserIsregistered, checkLevelOneDone, checkUserFbProfile, checkUserInstaProfile, checkDiscordInvitation, } = require("../functionality/service")
 const flowPathIndicator = new MapToLocal(mapNames.flowPathIndicator);
 const userData = new MapToLocal(mapNames.userData);
 const validate = require("validation-master")
@@ -317,8 +317,10 @@ exports.firstTelegramUserHandler = async(chatId, message) => {
         } else if (message === "SKIP THE TASK") {
             await sendMessageWith2Buttons(chatId, language.askForTwitterUserNames)
             await sendMessage(chatId, language.askForFirstTwitterUser)
-
             await flowPathIndicator.set(chatId, "15")
+        } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await sendMessage(chatId, language.askForWalletAddress);
+            await flowPathIndicator.set(chatId, "20")
         } else {
             await sendMessage(chatId, language.wrongAnswer)
         }
@@ -536,7 +538,10 @@ exports.thankYouHandler = async(chatId, message) => {
         const language = await languageChooser(chatId)
         await sendMessage(chatId, language.thankYouMessage)
         await updateInfo({ chat_id: chatId }, { is_participated: true }, { "UserInfo.wallet_wallet_address": message })
-        console.log(checkUserFbProfile(chatId))
+        if (await checkUserFbProfile(chatId) !== null && await checkUserInstaProfile(chatId) !== null && await checkDiscordInvitation(chatId) !== null) {
+            await updateInfo({ chat_id: chatId }, { completed_level_of_tasks: 2 })
+        }
+        console.log("From thank you" + await checkUserFbProfile(chatId))
         clearFlags(chatId).catch(err => {
             logger.error(`Error,${err.message}`)
         })

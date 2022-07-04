@@ -107,6 +107,9 @@ exports.handleTextMessage = async(chatId, message, firstName, lastName) => {
                 default:
                     sendMessage(chatId, language.somethingWentWrong)
             }
+        } else {
+            sendMessage(chatId, language.somethingWentWrong)
+
         }
 
     } catch (err) {

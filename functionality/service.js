@@ -37,7 +37,7 @@ exports.checkIfUserIsregistered = async(chatId) => {
 
 exports.checkLevelOneDone = async(chatId) => {
     try {
-        const user = await User.find({ chat_id: chatId }, "UserInfo.discord_username")
+        const user = await User.findOne({ chat_id: chatId }, "UserInfo.discord_username")
         return user
     } catch (err) {
         logger.error(`DB Fetch Error from checking---> ${JSON.stringify(err)}`)
@@ -47,8 +47,8 @@ exports.checkLevelOneDone = async(chatId) => {
 
 exports.checkUserFbProfile = async(chatId) => {
     try {
-        const user = await User.find({ chat_id: chatId }, "UserInfo.fb_profile_link")
-        return user
+        const user = await User.findOne({ chat_id: chatId })
+        return user ? user.UserInfo.fb_profile_link : user
     } catch (err) {
         logger.error(`DB Fetch Error from checking---> ${JSON.stringify(err)}`)
         return false
@@ -57,8 +57,8 @@ exports.checkUserFbProfile = async(chatId) => {
 
 exports.checkUserInstaProfile = async(chatId) => {
     try {
-        const user = await User.find({ chat_id: chatId }, "UserInfo.insta_profile_link")
-        return user
+        const user = await User.findOne({ chat_id: chatId })
+        return user ? user.UserInfo.insta_profile_link : user
     } catch (err) {
         logger.error(`DB Fetch Error from checking---> ${JSON.stringify(err)}`)
         return false
@@ -66,29 +66,8 @@ exports.checkUserInstaProfile = async(chatId) => {
 }
 exports.checkDiscordInvitation = async(chatId) => {
     try {
-        const user = await User.find({ chat_id: chatId }, "UserInfo.discord_invitationv_link")
-        return user
-    } catch (err) {
-        logger.error(`DB Fetch Error from checking---> ${JSON.stringify(err)}`)
-        return false
-    }
-}
-
-
-exports.checkFifthUsersOfTelegram = async(chatId) => {
-    try {
-        const user = await User.find({ chat_id: chatId }, "InvitedTelegramUsers.fifthUser")
-        return user
-    } catch (err) {
-        logger.error(`DB Fetch Error from checking---> ${JSON.stringify(err)}`)
-        return false
-    }
-}
-
-exports.checkFifthUserOfTwiiter = async(chatId) => {
-    try {
-        const user = await User.find({ chat_id: chatId }, "InvitedTwitterUsers.fifthTwitterUser")
-        return user
+        const user = await User.findOne({ chat_id: chatId })
+        return user ? UserInfo.discord_invitationv_link : user
     } catch (err) {
         logger.error(`DB Fetch Error from checking---> ${JSON.stringify(err)}`)
         return false
