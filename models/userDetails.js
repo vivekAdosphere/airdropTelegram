@@ -8,7 +8,7 @@ const getCurrentTime = () => {
 }
 
 const userDetail = new mongoose.Schema({
-    chat_id: {
+    user_id: {
         type: Number,
         required: true,
         default: null

@@ -7,6 +7,7 @@ const {
     sendMessage,
     isMemberOfGroup,
     sendMandatoryMessage,
+    sendMessageWithTaskButtons
 
 } = require("../functionality/messageSender");
 const {
@@ -42,86 +43,89 @@ const flowPathIndicator = new MapToLocal(mapNames.flowPathIndicator);
  */
 
 
-exports.handleTextMessage = async(chatId, message, firstName, lastName) => {
+exports.handleTextMessage = async(userId, message, firstName, lastName) => {
     try {
-        chatId = chatId.toString()
-        const language = await languageChooser(chatId)
+
+        userId = userId.toString()
+        const language = await languageChooser(userId)
         if (message === "/start") {
-            startHandler(chatId);
-        } else if (await flowPathIndicator.has(chatId)) {
-            switch (await flowPathIndicator.get(chatId)) {
+            startHandler(userId);
+        } else if (await flowPathIndicator.has(userId)) {
+            console.log(await flowPathIndicator.get(userId))
+
+            switch (await flowPathIndicator.get(userId)) {
                 case "1":
-                    answerHandler(chatId, message, firstName, lastName)
+                    answerHandler(userId, message, firstName, lastName)
                     break
                 case "2":
-                    sendMessageWithInlineKeyboard(chatId, language.taskList)
+                    sendMessageWithTaskButtons(userId, language.taskList)
                     break
                 case "3":
-                    twitterProfileHandler(chatId, message)
+                    twitterProfileHandler(userId, message)
                     break
                 case "4":
-                    redditProfileHandler(chatId, message)
+                    redditProfileHandler(userId, message)
                     break
                 case "5":
-                    discordUsernameHandler(chatId, message)
+                    discordUsernameHandler(userId, message)
                     break
                 case "6":
-                    facebookProfileHandler(chatId, message)
+                    facebookProfileHandler(userId, message)
                     break
                 case "7":
-                    instagramProfileHandler(chatId, message)
+                    instagramProfileHandler(userId, message)
                     break
                 case "8":
-                    discordInvitationHandler(chatId, message)
+                    discordInvitationHandler(userId, message)
                     break
                 case "9":
-                    telegramUsernamesHandler(chatId, message)
+                    telegramUsernamesHandler(userId, message)
                     break
                 case "10":
-                    firstTelegramUserHandler(chatId, message)
+                    firstTelegramUserHandler(userId, message)
                     break
                 case "11":
-                    secondTelegramUserHandler(chatId, message)
+                    secondTelegramUserHandler(userId, message)
                     break
                 case "12":
-                    thirdTelegramUserHandler(chatId, message)
+                    thirdTelegramUserHandler(userId, message)
                     break
                 case "13":
-                    forthTelegramUserHandler(chatId, message)
+                    forthTelegramUserHandler(userId, message)
                     break
                 case "14":
-                    twitterUsernamesHandler(chatId, message)
+                    twitterUsernamesHandler(userId, message)
                     break
                 case "15":
-                    firstTwitterUserHandler(chatId, message)
+                    firstTwitterUserHandler(userId, message)
                     break
                 case "16":
-                    secondTwitterUserHandler(chatId, message)
+                    secondTwitterUserHandler(userId, message)
                     break
                 case "17":
-                    thirdTwitterUserHandler(chatId, message)
+                    thirdTwitterUserHandler(userId, message)
                     break
                 case "18":
-                    forthTwitterUserHandler(chatId, message)
+                    forthTwitterUserHandler(userId, message)
                     break
                 case "19":
-                    walletAddressHandler(chatId, message)
+                    walletAddressHandler(userId, message)
                     break
                 case "20":
-                    thankYouHandler(chatId, message)
+                    thankYouHandler(userId, message)
                     break
                 default:
-                    sendMessage(chatId, language.somethingWentWrong)
+                    sendMessage(userId, language.somethingWentWrong)
             }
         } else {
-            sendMessage(chatId, language.somethingWentWrong)
+            sendMessage(userId, language.somethingWentWrong)
 
         }
 
     } catch (err) {
-        const language = await languageChooser(chatId)
+        const language = await languageChooser(userId)
         logger.error(`Error from handle text message,${language.somethingWentWrong}`)
-        clearFlags(chatId).catch(err => {
+        clearFlags(userId).catch(err => {
             logger.error(`Error,${err.message}`)
         })
     }
@@ -132,27 +136,27 @@ exports.handleTextMessage = async(chatId, message, firstName, lastName) => {
 /**
  * @param all the callback query comming from inline markup buttons handled here
  */
-exports.handleCallback_query = async(chatId, callbackData) => {
+exports.handleCallback_query = async(userId, callbackData) => {
     try {
 
-        chatId = chatId.toString()
-        const language = await languageChooser(chatId)
+        userId = userId.toString()
+        const language = await languageChooser(userId)
         const groupId = "@amazew";
         const channelId = "@theamazeworld"
             // const channelId = "@amazew";
         if (callbackData) {
             switch (callbackData) {
                 case "user_detail":
-                    if (await isMemberOfGroup(groupId, chatId)) {
-                        await updateInfo({ chat_id: chatId }, { is_joined_telegram_group: true })
-                        emailHandler(chatId, language.askForEmail)
+                    if (await isMemberOfGroup(groupId, userId)) {
+                        await updateInfo({ chat_id: userId }, { is_joined_telegram_group: true })
+                        emailHandler(userId, language.askForEmail)
                     } else {
-                        sendMandatoryMessage(chatId, language.dothisFirst)
+                        sendMandatoryMessage(userId, language.dothisFirst)
                     }
                     break
 
                 default:
-                    sendMessage(chatId, language.somethingWentWrong)
+                    sendMessage(userId, language.somethingWentWrong)
 
             }
 
@@ -163,7 +167,7 @@ exports.handleCallback_query = async(chatId, callbackData) => {
     } catch (err) {
         logger.error(`Error from handle Callback query,${language.somethingWentWrong}`)
         console.log(err.message)
-        clearFlags(chatId).catch(err => {
+        clearFlags(userId).catch(err => {
             logger.error(`Error,${err.message}`)
         })
     }

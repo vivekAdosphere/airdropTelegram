@@ -12,11 +12,11 @@ exports.saveUserDetail = async(dataObject) => {
     }
 }
 
-exports.updateInfo = async(chatId, dataObject) => {
+exports.updateInfo = async(userId, dataObject) => {
     try {
 
         console.log(dataObject)
-        const user = await User.updateOne(chatId, dataObject)
+        const user = await User.updateOne(userId, dataObject)
         return user
     } catch (err) {
         logger.error(`DB Fetch Error from updating---> ${JSON.stringify(err)}`)
@@ -24,9 +24,9 @@ exports.updateInfo = async(chatId, dataObject) => {
     }
 }
 
-exports.checkIfUserIsregistered = async(chatId) => {
+exports.checkIfUserIsregistered = async(userId) => {
     try {
-        const user = await User.findOne({ chat_id: chatId })
+        const user = await User.findOne({ user_id: userId })
         return user
 
     } catch (err) {
@@ -35,9 +35,9 @@ exports.checkIfUserIsregistered = async(chatId) => {
     }
 }
 
-exports.checkLevelOneDone = async(chatId) => {
+exports.checkLevelOneDone = async(userId) => {
     try {
-        const user = await User.findOne({ chat_id: chatId })
+        const user = await User.findOne({ user_id: userId })
         return user ? UserInfo.discord_username : user
     } catch (err) {
         logger.error(`DB Fetch Error from checking---> ${JSON.stringify(err)}`)
@@ -45,9 +45,9 @@ exports.checkLevelOneDone = async(chatId) => {
     }
 }
 
-exports.checkAllTelegramUsers = async(chatId) => {
+exports.checkAllTelegramUsers = async(userId) => {
     try {
-        const user = await User.findOne({ chat_id: chatId })
+        const user = await User.findOne({ user_id: userId })
         return user.InvitedTwitterUsers.fifthUser
     } catch (err) {
         logger.error(`DB Fetch Error from checking---> ${JSON.stringify(err)}`)
@@ -55,9 +55,9 @@ exports.checkAllTelegramUsers = async(chatId) => {
     }
 }
 
-exports.checkUserFbProfile = async(chatId) => {
+exports.checkUserFbProfile = async(userId) => {
     try {
-        const user = await User.findOne({ chat_id: chatId })
+        const user = await User.findOne({ user_id: userId })
         return user ? user.UserInfo.fb_profile_link : user
     } catch (err) {
         logger.error(`DB Fetch Error from checking---> ${JSON.stringify(err)}`)
@@ -65,18 +65,18 @@ exports.checkUserFbProfile = async(chatId) => {
     }
 }
 
-exports.checkUserInstaProfile = async(chatId) => {
+exports.checkUserInstaProfile = async(userId) => {
     try {
-        const user = await User.findOne({ chat_id: chatId })
+        const user = await User.findOne({ user_id: userId })
         return user ? user.UserInfo.insta_profile_link : user
     } catch (err) {
         logger.error(`DB Fetch Error from checking---> ${JSON.stringify(err)}`)
         return false
     }
 }
-exports.checkDiscordInvitation = async(chatId) => {
+exports.checkDiscordInvitation = async(userId) => {
     try {
-        const user = await User.findOne({ chat_id: chatId })
+        const user = await User.findOne({ user_id: userId })
         return user ? UserInfo.discord_invitationv_link : user
     } catch (err) {
         logger.error(`DB Fetch Error from checking---> ${JSON.stringify(err)}`)
@@ -84,9 +84,9 @@ exports.checkDiscordInvitation = async(chatId) => {
     }
 }
 
-exports.checkAllTwitterUser = async(chatId) => {
+exports.checkAllTwitterUser = async(userId) => {
     try {
-        const user = await User.findOne({ chat_id: chatId })
+        const user = await User.findOne({ user_id: userId })
         return user.InvitedTwitterUsers.fifthUser
     } catch (err) {
         logger.error(`DB Fetch Error from checking---> ${JSON.stringify(err)}`)

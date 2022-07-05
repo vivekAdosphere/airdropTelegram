@@ -5,13 +5,13 @@ const logger = require("../functionality/logger");
 const TELEGRAM_API = config.TELEGRAM_BASE_API;
 const TOKEN = config.TOKEN;
 
-exports.sendMessage = async(chatId, message) => {
+exports.sendMessage = async(userId, message) => {
     try {
         const res = await axios({
             url: `${TELEGRAM_API}${TOKEN}/sendMessage`,
             method: 'post',
             params: {
-                chat_id: chatId,
+                chat_id: userId,
                 text: message,
                 parse_mode: "HTML"
             },
@@ -26,14 +26,14 @@ exports.sendMessage = async(chatId, message) => {
     }
 }
 
-exports.sendMessageWithTaskButtons = async(chatId, message) => {
+exports.sendMessageWithTaskButtons = async(userId, message) => {
     try {
-        chatId = chatId.toString()
+        userId = userId.toString()
         const res = await axios({
             url: `${TELEGRAM_API}${TOKEN}/sendMessage`,
             method: 'post',
             params: {
-                chat_id: chatId,
+                chat_id: userId,
                 text: message,
                 parse_mode: "HTML",
                 reply_markup: {
@@ -74,13 +74,13 @@ exports.sendMessageWithTaskButtons = async(chatId, message) => {
     }
 }
 
-exports.isMemberOfGroup = async(chatID, userID) => {
+exports.isMemberOfGroup = async(userId, userID) => {
     try {
         const res = await axios({
             method: 'post',
             url: `${TELEGRAM_API}${TOKEN}/getChatMember`,
             params: {
-                chat_id: chatID,
+                chat_id: userId,
                 user_id: userID
             }
         })
@@ -97,14 +97,14 @@ exports.isMemberOfGroup = async(chatID, userID) => {
     }
 }
 
-exports.isMemberOfChannel = async(chatID, userID) => {
+exports.isMemberOfChannel = async(userId, userID) => {
     try {
 
         const res = await axios({
             method: 'post',
             url: `${TELEGRAM_API}${TOKEN}/IsChatMember}`,
             params: {
-                chat_id: chatID,
+                chat_id: userId,
                 user_id: userID,
                 parse_mode: "HTML"
             }
@@ -119,14 +119,14 @@ exports.isMemberOfChannel = async(chatID, userID) => {
 }
 
 
-exports.sendMandatoryMessage = async(chatId, message) => {
+exports.sendMandatoryMessage = async(userId, message) => {
     try {
-        chatId = chatId.toString()
+        userId = userId.toString()
         const res = await axios({
             url: `${TELEGRAM_API}${TOKEN}/sendMessage`,
             method: 'post',
             params: {
-                chat_id: chatId,
+                chat_id: userId,
                 text: message,
                 parse_mode: "HTML",
                 reply_markup: {
@@ -151,13 +151,13 @@ exports.sendMandatoryMessage = async(chatId, message) => {
     }
 }
 
-exports.sendWalletAddressButton = async(chatID, message, text, data) => {
+exports.sendWalletAddressButton = async(userId, message, text, data) => {
     try {
         const res = await axios({
             url: `${TELEGRAM_API}${TOKEN}/sendMessage`,
             method: 'post',
             params: {
-                chat_id: chatID,
+                chat_id: userId,
                 text: message,
                 parse_mode: "HTML",
                 reply_markup: {
@@ -185,14 +185,14 @@ exports.sendWalletAddressButton = async(chatID, message, text, data) => {
 }
 
 
-exports.sendMessageWith2Buttons = async(chatID, message) => {
+exports.sendMessageWith2Buttons = async(userId, message) => {
     try {
-        chatID = chatID.toString();
+        userId = userId.toString();
         const res = await axios({
             "url": `${TELEGRAM_API}${TOKEN}/sendMessage`,
             "method": 'post',
             params: {
-                chat_id: chatID,
+                chat_id: userId,
                 text: message,
                 parse_mode: "HTML",
                 reply_markup: {

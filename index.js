@@ -23,6 +23,7 @@ const init = async() => {
 
 
 app.post(URI, async(req, res) => {
+    console.log(req.body)
 
     /**
      * @param to handle text messages
@@ -31,8 +32,8 @@ app.post(URI, async(req, res) => {
      */
 
     if (req.body.message) {
-        const { first_name: firstName, id: chat_id, last_name: lastName } = req.body.message.from
-        handleTextMessage(chat_id, req.body.message.text, firstName, lastName)
+        const { first_name: firstName, id: userId, last_name: lastName } = req.body.message.from
+        handleTextMessage(userId, req.body.message.text, firstName, lastName)
     }
 
     /**
@@ -41,8 +42,8 @@ app.post(URI, async(req, res) => {
      * ["updated_id", "message"]
      */
     else if (req.body.callback_query) {
-        const { id: chat_id } = req.body.callback_query.from;
-        handleCallback_query(chat_id, req.body.callback_query.data)
+        const { id: userId } = req.body.callback_query.from;
+        handleCallback_query(userId, req.body.callback_query.data)
     }
 
     res.status(200).end();
