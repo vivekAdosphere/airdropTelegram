@@ -5,9 +5,9 @@ const { clearFlags } = require("../functionality/utilities");
 const languageChooser = require("../language/languageChooser");
 const {
     sendMessage,
-    checkChannelMemberStatus,
-    sendMessageWith3options,
-    sendMessageWithInlineKeyboard
+    isMemberOfGroup,
+    sendMandatoryMessage,
+
 } = require("../functionality/messageSender");
 const {
     startHandler,
@@ -31,15 +31,21 @@ const {
     firstTwitterUserHandler,
     thirdTwitterUserHandler,
     forthTwitterUserHandler,
-} = require("../controllers/messagingFunction")
+} = require("../controllers/messagingFunction");
+const { updateInfo } = require("../functionality/service");
 
 const flowPathIndicator = new MapToLocal(mapNames.flowPathIndicator);
+
+
+/**
+ * @param all the text related functions handled here
+ */
+
 
 exports.handleTextMessage = async(chatId, message, firstName, lastName) => {
     try {
         chatId = chatId.toString()
         const language = await languageChooser(chatId)
-
         if (message === "/start") {
             startHandler(chatId);
         } else if (await flowPathIndicator.has(chatId)) {
@@ -113,32 +119,35 @@ exports.handleTextMessage = async(chatId, message, firstName, lastName) => {
         }
 
     } catch (err) {
+        const language = await languageChooser(chatId)
         logger.error(`Error from handle text message,${language.somethingWentWrong}`)
-        c
         clearFlags(chatId).catch(err => {
             logger.error(`Error,${err.message}`)
         })
     }
 }
 
+
+
+/**
+ * @param all the callback query comming from inline markup buttons handled here
+ */
 exports.handleCallback_query = async(chatId, callbackData) => {
     try {
-        // console.log("UR DATA IS " + callbackData)
-        // console.log(chatId)
 
         chatId = chatId.toString()
-
         const language = await languageChooser(chatId)
-
         const groupId = "@amazew";
-        // const channelId = "@amazew";
+        const channelId = "@theamazeworld"
+            // const channelId = "@amazew";
         if (callbackData) {
             switch (callbackData) {
                 case "user_detail":
-                    if (await checkChannelMemberStatus(groupId, chatId)) {
+                    if (await isMemberOfGroup(groupId, chatId)) {
+                        await updateInfo({ chat_id: chatId }, { is_joined_telegram_group: true })
                         emailHandler(chatId, language.askForEmail)
                     } else {
-                        sendMessageWith3options(chatId, language.dothisFirst)
+                        sendMandatoryMessage(chatId, language.dothisFirst)
                     }
                     break
 

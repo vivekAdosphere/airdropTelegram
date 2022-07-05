@@ -38,6 +38,7 @@ module.exports = {
     invalidEmail: "❌Please Enter valid Email Address",
     invalidTwitterProfile: "❌ Enter a valid Twitter URL",
     invalidReddit: "❌ Enter a valid Reddit URL",
+    invalidTelegramUserName: "❌ Enter a valid Telegram username",
     invalidDiscordUsername: "❌ Enter a valid Discord Username",
     invalidFacebookUsername: "❌ Enter a valid Facebook Username",
     invalidInstagramUsername: "❌ Enter a valid Instagram Username",

@@ -54,15 +54,15 @@ exports.urlVerifier = async(url, socialMedia) => {
     try {
         url = url.toLowerCase()
         socialMedia = socialMedia.toLowerCase()
-        const validUrlRegex = /((?:(?:http?|ftp)[s]*:\/\/)?[a-z0-9-%\/\&=?\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?)/gi
+        let validUrlRegex = /((?:(?:http?|ftp)[s]*:\/\/)?[a-z0-9-%\/\&=?\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?)/gi
 
         if (url && url.startsWith("https://") && validUrlRegex.test(url) && url.includes(socialMedia)) {
             let isValidPathname = false
             let urlObject = new URL(url)
 
+
             if (urlObject.pathname !== "/") {
                 let pathName = urlObject.pathname;
-                console.log(pathName, typeof pathName)
                 let searchParams = urlObject.searchParams
 
                 switch (socialMedia) {
@@ -76,8 +76,6 @@ exports.urlVerifier = async(url, socialMedia) => {
                         if (url.match(/(?:https?:\/\/)?(?:www\.)?(?:facebook|fb|m\.facebook)\.(?:com|me)\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-\.]+)(?:\/)?/i)) {
                             isValidPathname = true
                         }
-                        // console.log(searchParams.has("id"), typeof searchParams)
-                        // isValidPathname = (pathName.includes("/profile") && searchParams.has("id")) || pathName.match(/^[a-z\d.]{5,}$/i)
                         break
                     case "twitter":
                         isValidPathname = true
@@ -88,22 +86,23 @@ exports.urlVerifier = async(url, socialMedia) => {
                     case "telegram":
                         if (url.match(/^(?:|(https?:\/\/)?(|www)[.]?((t|telegram)\.me)\/)[a-zA-Z0-9_]{5,32}$/gm)) {
                             isValidPathname = true
-
                         }
+                        break
+                    default:
+                        isValidPathname = false
                 }
             }
 
-            if (isValidPathname) {
-                const res = await axios.get(url)
-                if (res.status === 200) {
-                    return true
-                }
-            }
+            return true
+
         }
 
+        console.log("test")
         return false
     } catch (err) {
-        console.log(err)
+        console.log(url)
+        console.log(err.response.status)
+        console.log(err.message)
         return false
     }
 }

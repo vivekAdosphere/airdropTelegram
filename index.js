@@ -21,19 +21,27 @@ const init = async() => {
     console.log(res.data)
 }
 
+
 app.post(URI, async(req, res) => {
 
-    // TEXT MESSAGE
-    // ["updated_id", "message"]
+    /**
+     * @param to handle text messages
+     * TEXT MESSAGE
+     * ["updated_id", "message"]
+     */
+
     if (req.body.message) {
         const { first_name: firstName, id: chat_id, last_name: lastName } = req.body.message.from
         handleTextMessage(chat_id, req.body.message.text, firstName, lastName)
     }
-    // REPLY MARKUP BUTTON
-    // ["updated_id", "callback_query"]
+
+    /**
+     * @param to handle callback query comming from inline keyboard markup buttons
+     * TEXT MESSAGE
+     * ["updated_id", "message"]
+     */
     else if (req.body.callback_query) {
         const { id: chat_id } = req.body.callback_query.from;
-
         handleCallback_query(chat_id, req.body.callback_query.data)
     }
 

@@ -26,7 +26,7 @@ exports.sendMessage = async(chatId, message) => {
     }
 }
 
-exports.sendMessageWithInlineKeyboard = async(chatId, message) => {
+exports.sendMessageWithTaskButtons = async(chatId, message) => {
     try {
         chatId = chatId.toString()
         const res = await axios({
@@ -74,11 +74,35 @@ exports.sendMessageWithInlineKeyboard = async(chatId, message) => {
     }
 }
 
-exports.checkChannelMemberStatus = async(chatID, userID, type = "group") => {
+exports.isMemberOfGroup = async(chatID, userID) => {
     try {
         const res = await axios({
             method: 'post',
-            url: `${TELEGRAM_API}${TOKEN}/${type==="group" ? "getChatMember" : ""}`,
+            url: `${TELEGRAM_API}${TOKEN}/getChatMember`,
+            params: {
+                chat_id: chatID,
+                user_id: userID
+            }
+        })
+        console.log(res.data)
+        if (res.data.result.status === "member" || res.data.result.status === "administrator") {
+            return true
+        } else {
+            return false
+        }
+
+    } catch (err) {
+        logger.error(`Error from group member status,${JSON.stringify(err.response.data)}`);
+        return err.response.data
+    }
+}
+
+exports.isMemberOfChannel = async(chatID, userID) => {
+    try {
+
+        const res = await axios({
+            method: 'post',
+            url: `${TELEGRAM_API}${TOKEN}/IsChatMember}`,
             params: {
                 chat_id: chatID,
                 user_id: userID,
@@ -89,13 +113,13 @@ exports.checkChannelMemberStatus = async(chatID, userID, type = "group") => {
         return res.data.result.status === "member" || "administrator" ? true : false
 
     } catch (err) {
-        logger.error(`Error from check channel member status,${JSON.stringify(err.response.data)}`);
+        logger.error(`Error from  channel member status,${JSON.stringify(err.response.data)}`);
         return err.response.data
     }
 }
 
 
-exports.sendMessageWith3options = async(chatId, message) => {
+exports.sendMandatoryMessage = async(chatId, message) => {
     try {
         chatId = chatId.toString()
         const res = await axios({
@@ -127,7 +151,7 @@ exports.sendMessageWith3options = async(chatId, message) => {
     }
 }
 
-exports.sendMessageWithOneButton = async(chatID, message, text, data) => {
+exports.sendWalletAddressButton = async(chatID, message, text, data) => {
     try {
         const res = await axios({
             url: `${TELEGRAM_API}${TOKEN}/sendMessage`,
