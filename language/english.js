@@ -44,6 +44,16 @@ module.exports = {
     invalidInstagramUsername: "❌ Enter a valid Instagram Username",
     invalidWalletAddress: "❌ Enter a valid Wallet Address",
     invalidDiscordInvitationLink: "❌ Enter a valid Discord Invitation Link",
+    errorForVoice: "You have entered voice message,Please try again with text message",
+    errorForPhoto: "You have entered photo,Please try again with text message",
+    errorForSticker: "You have entered sticker,Please try again with text message",
+    errorForAnimation: "You have entered gif,Please try again with text message",
+    errorForDocument: "You have entered document message,Please try again with text message",
+    errorForAudio: "You have entered audio message,Please try again with text message",
+    errorForVideo: "You have entered video message,Please try again with text message",
+    errorForLocation: "You have entered location,Please try again with text message",
+    errorForPoll: "You have entered poll message,Please try again with text message",
+    errorForContact: "You have entered Contact,Please try again with text message",
 
 
 

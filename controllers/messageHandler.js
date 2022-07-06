@@ -39,20 +39,20 @@ const flowPathIndicator = new MapToLocal(mapNames.flowPathIndicator);
 
 
 /**
- * @param all the text related functions handled here
+ * @description this function handles text messages coming from user input
+ * @param {Number} userId unique id of chat user
+ * @param {String} message message comming from user input
+ * @param {String} firstName first name of the user
+ * @param {String} lastName last name if the user
  */
 
-
 exports.handleTextMessage = async(userId, message, firstName, lastName) => {
+    const language = await languageChooser(userId)
     try {
-
         userId = userId.toString()
-        const language = await languageChooser(userId)
         if (message === "/start") {
             startHandler(userId);
         } else if (await flowPathIndicator.has(userId)) {
-            console.log(await flowPathIndicator.get(userId))
-
             switch (await flowPathIndicator.get(userId)) {
                 case "1":
                     answerHandler(userId, message, firstName, lastName)
@@ -119,12 +119,9 @@ exports.handleTextMessage = async(userId, message, firstName, lastName) => {
             }
         } else {
             sendMessage(userId, language.somethingWentWrong)
-
         }
-
     } catch (err) {
-        const language = await languageChooser(userId)
-        logger.error(`Error from handle text message,${language.somethingWentWrong}`)
+        logger.error(`Error from handle text message,${err.message}`)
         clearFlags(userId).catch(err => {
             logger.error(`Error,${err.message}`)
         })
@@ -132,18 +129,18 @@ exports.handleTextMessage = async(userId, message, firstName, lastName) => {
 }
 
 
-
 /**
- * @param all the callback query comming from inline markup buttons handled here
+ * @description handles callback data(payload) when user click any reply markup button
+ * @param {Number} userId  unique id of chat user
+ * @param {String} callbackData payload of specific reply markup button
  */
-exports.handleCallback_query = async(userId, callbackData) => {
-    try {
 
+exports.handleCallback_query = async(userId, callbackData) => {
+    const language = await languageChooser(userId)
+    try {
         userId = userId.toString()
-        const language = await languageChooser(userId)
         const groupId = "@amazew";
         const channelId = "@theamazeworld"
-            // const channelId = "@amazew";
         if (callbackData) {
             switch (callbackData) {
                 case "user_detail":
@@ -154,19 +151,184 @@ exports.handleCallback_query = async(userId, callbackData) => {
                         sendMandatoryMessage(userId, language.dothisFirst)
                     }
                     break
-
                 default:
                     sendMessage(userId, language.somethingWentWrong)
-
             }
-
-            // //to check the user is a member of a channel or not
-
         }
-
     } catch (err) {
-        logger.error(`Error from handle Callback query,${language.somethingWentWrong}`)
-        console.log(err.message)
+        logger.error(`Error from handle Callback query,${err.message}`)
+        clearFlags(userId).catch(err => {
+            logger.error(`Error,${err.message}`)
+        })
+    }
+}
+
+/**
+ * @description handles voice messages entered by user
+ * @param {Number} userId unique id of chat user
+ */
+
+exports.handleVoiceMessages = async(userId) => {
+    try {
+        userId = userId.toString()
+        const language = await languageChooser(userId)
+        await sendMessage(userId, language.errorForVoice)
+    } catch (err) {
+        logger.error(`Error from voice hanlder,${err.message}`)
+        clearFlags(userId).catch(err => {
+            logger.error(`Error,${err.message}`)
+        })
+    }
+}
+
+/**
+ * @description handles photo messages entered by user
+ * @param {Number} userId unique id of chat user
+ */
+exports.handlePhotoMessages = async(userId) => {
+    try {
+        userId = userId.toString()
+        const language = await languageChooser(userId)
+        await sendMessage(userId, language.errorForPhoto)
+    } catch (err) {
+        logger.error(`Error from photo handler,${err.message}`)
+        clearFlags(userId).catch(err => {
+            logger.error(`Error,${err.message}`)
+        })
+    }
+}
+
+/**
+ * @description handles sticker messages entered by user
+ * @param {Number} userId unique id of chat user
+ */
+exports.handleStickerMessages = async(userId) => {
+    try {
+        userId = userId.toString()
+        const language = await languageChooser(userId)
+        await sendMessage(userId, language.errorForSticker)
+    } catch (err) {
+        logger.error(`Error from handle sticker,${err.message}`)
+        clearFlags(userId).catch(err => {
+            logger.error(`Error,${err.message}`)
+        })
+    }
+}
+
+/**
+ * @description handles animation messages entered by user
+ * @param {Number} userId unique id of chat user
+ */
+exports.handleAnimationMessages = async(userId) => {
+    try {
+        userId = userId.toString()
+        const language = await languageChooser(userId)
+        await sendMessage(userId, language.errorForAnimation)
+    } catch (err) {
+        logger.error(`Error from animation handler,${err.message}`)
+        clearFlags(userId).catch(err => {
+            logger.error(`Error,${err.message}`)
+        })
+    }
+}
+
+/**
+ * @description handles document messages entered by user
+ * @param {Number} userId unique id of chat user
+ */
+exports.handleDocumentMessages = async(userId) => {
+    try {
+        userId = userId.toString()
+        const language = await languageChooser(userId)
+        await sendMessage(userId, language.errorForAnimation)
+    } catch (err) {
+        logger.error(`Error from document handler,${err.message}`)
+        clearFlags(userId).catch(err => {
+            logger.error(`Error,${err.message}`)
+        })
+    }
+}
+
+/**
+ * @description handles audio messages entered by user
+ * @param {Number} userId unique id of chat user
+ */
+exports.handleAudioMessages = async(userId) => {
+    try {
+        userId = userId.toString()
+        const language = await languageChooser(userId)
+        await sendMessage(userId, language.errorForAudio)
+    } catch (err) {
+        logger.error(`Error from audio handler,${err.message}`)
+        clearFlags(userId).catch(err => {
+            logger.error(`Error,${err.message}`)
+        })
+    }
+}
+
+/**
+ * @description handles video messages entered by user
+ * @param {Number} userId unique id of chat user
+ */
+exports.handleVideoMessages = async(userId) => {
+    try {
+        userId = userId.toString()
+        const language = await languageChooser(userId)
+        await sendMessage(userId, language.errorForVideo)
+    } catch (err) {
+        logger.error(`Error from video handler,${err.message}`)
+        clearFlags(userId).catch(err => {
+            logger.error(`Error,${err.message}`)
+        })
+    }
+}
+
+/**
+ * @description handles location messages entered by user
+ * @param {Number} userId unique id of chat user
+ */
+exports.handleLocationMessages = async(userId) => {
+    try {
+        userId = userId.toString()
+        const language = await languageChooser(userId)
+        await sendMessage(userId, language.errorForLocation)
+    } catch (err) {
+        logger.error(`Error from location handler,${err.message}`)
+        clearFlags(userId).catch(err => {
+            logger.error(`Error,${err.message}`)
+        })
+    }
+}
+
+/**
+ * @description handles poll messages entered by user
+ * @param {Number} userId unique id of chat user
+ */
+
+exports.handlePollMessages = async(userId) => {
+    try {
+        userId = userId.toString()
+        const language = await languageChooser(userId)
+        await sendMessage(userId, language.errorForPoll)
+    } catch (err) {
+        logger.error(`Error from poll handler,${err.message}`)
+        clearFlags(userId).catch(err => {
+            logger.error(`Error,${err.message}`)
+        })
+    }
+}
+
+/**
+ * @description handles contact messages entered by user
+ * @param {Number} userId unique id of chat user
+ */
+exports.handleContactMessages = async(userId) => {
+    try {
+        userId = userId.toString()
+        const language = await languageChooser(userId)
+        await sendMessage(userId, language.errorForPoll)
+    } catch (err) {
+        logger.error(`Error from poll handler,${err.message}`)
         clearFlags(userId).catch(err => {
             logger.error(`Error,${err.message}`)
         })

@@ -1,11 +1,4 @@
 const mongoose = require("mongoose");
-const moment = require("moment");
-
-const getCurrentTime = () => {
-    let dateAndTime = moment().utcOffset(330)
-    return dateAndTime.format()
-
-}
 
 const userDetail = new mongoose.Schema({
     user_id: {

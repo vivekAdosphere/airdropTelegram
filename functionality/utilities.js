@@ -7,8 +7,12 @@ const selectedCommunicationLanguage = new MapToLocal(mapNames.selectedCommunicat
 const userData = new MapToLocal(mapNames.userData)
 const flowPathIndicator = new MapToLocal(mapNames.flowPathIndicator)
 
+/**
+ * @description this function clear all mapping stored in db for a particular user
+ * @param {Number} number unique userid coming from telegram message chat
+ */
+
 exports.clearFlags = async(number) => {
-    // console.log("here")
     try {
         if (await flowPathIndicator.has(number)) {
             await flowPathIndicator.delete(number)
@@ -24,10 +28,22 @@ exports.clearFlags = async(number) => {
     }
 }
 
+/**
+ * @description this function returns the current time
+ * @returns current time for the indian region
+ */
+
 exports.getCurrentTime = () => {
     let dateAndTime = moment().utcOffset(330)
     return dateAndTime.format()
 }
+
+
+/**
+ * @description checks the given date is valid or not
+ * @param {String} enteredDate date 
+ * @returns {Boolean} is valid date or not
+ */
 
 exports.isValidDate = (enteredDate) => {
 
@@ -49,6 +65,13 @@ exports.isValidDate = (enteredDate) => {
 
 
 
+/**
+ * 
+ * @description Verifies whether the given social media url is valid or not.
+ * @param {String} url URL of social media
+ * @param {String} socialMedia Identifier of social media domain
+ * @returns {Boolean} Is valid social media
+ */
 
 exports.urlVerifier = async(url, socialMedia) => {
     try {
@@ -92,17 +115,12 @@ exports.urlVerifier = async(url, socialMedia) => {
                         isValidPathname = false
                 }
             }
-
             return true
 
         }
-
-        console.log("test")
         return false
     } catch (err) {
-        console.log(url)
-        console.log(err.response.status)
-        console.log(err.message)
+        logger.error(`Error --> ${err.message}`)
         return false
     }
 }

@@ -1,5 +1,9 @@
 require("dotenv").config();
 
+/**
+ * contains info coming from .env moduels
+ */
+
 module.exports = {
     PORT: process.env.PORT || 3001,
     TOKEN: process.env.TOKEN,

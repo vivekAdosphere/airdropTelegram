@@ -5,6 +5,13 @@ const logger = require("../functionality/logger");
 const TELEGRAM_API = config.TELEGRAM_BASE_API;
 const TOKEN = config.TOKEN;
 
+/**
+ * @description this function is used to send text message to a particulat user id
+ * @param {Number} userId unique id of user chat
+ * @param {String} message message to send to a user 
+ * @returns data of response
+ */
+
 exports.sendMessage = async(userId, message) => {
     try {
         const res = await axios({
@@ -20,12 +27,18 @@ exports.sendMessage = async(userId, message) => {
         return res.data
 
     } catch (err) {
-        logger.error(`Error from Send Message,${JSON.stringify(err.response.data)}`);
-        // console.log(err)
-        return err.response.data
+        logger.error(`Error from Send Message,${JSON.stringify(err.message)}`);
+        return err
     }
 }
 
+
+/**
+ * @description this function is used to send text message along with task reply markup buttons to a particulat user id
+ * @param {Number} userId unique id of user chat
+ * @param {String} message message to send to a user 
+ * @returns data of response
+ */
 exports.sendMessageWithTaskButtons = async(userId, message) => {
     try {
         userId = userId.toString()
@@ -74,6 +87,12 @@ exports.sendMessageWithTaskButtons = async(userId, message) => {
     }
 }
 
+/**
+ * @description this function is used to check user is a member of a telegram group or not
+ * @param {Number} userId unique id of user chat
+ * @param {String} message message to send to a user 
+ * @returns {Boolean} is member os a group or not
+ */
 exports.isMemberOfGroup = async(userId, userID) => {
     try {
         const res = await axios({
@@ -97,6 +116,12 @@ exports.isMemberOfGroup = async(userId, userID) => {
     }
 }
 
+/**
+ * @description this function is used to check user is a member of a telegram channel or not
+ * @param {Number} userId unique id of user chat
+ * @param {String} message message to send to a user 
+ * @returns {Boolean} is member os a channel or not
+ */
 exports.isMemberOfChannel = async(userId, userID) => {
     try {
 
@@ -118,6 +143,13 @@ exports.isMemberOfChannel = async(userId, userID) => {
     }
 }
 
+
+/**
+ * @description this function is used to sendMessge with mandatory task buttons
+ * @param {Number} userId unique id of user chat
+ * @param {String} message message to send to a user 
+ * @returns response data
+ */
 
 exports.sendMandatoryMessage = async(userId, message) => {
     try {
@@ -151,6 +183,13 @@ exports.sendMandatoryMessage = async(userId, message) => {
     }
 }
 
+
+/**
+ * @description this function is used to send message with Enter your wallet address button
+ * @param {Number} userId unique id of user chat
+ * @param {String} message message to send to a user 
+ * @returns response data
+ */
 exports.sendWalletAddressButton = async(userId, message, text, data) => {
     try {
         const res = await axios({
@@ -162,18 +201,13 @@ exports.sendWalletAddressButton = async(userId, message, text, data) => {
                 parse_mode: "HTML",
                 reply_markup: {
                     keyboard: [
-
                         [
                             { text: "ENTER YOUR WALLET ADDRESS" }
                         ]
-
                     ],
                     resize_keyboard: true,
                     one_time_keyboard: true,
-
                 },
-
-
             }
         })
         return res.data
@@ -184,7 +218,12 @@ exports.sendWalletAddressButton = async(userId, message, text, data) => {
     }
 }
 
-
+/**
+ * @description this function is used to sendmessage with 2 buttons
+ * @param {Number} userId unique id of chat user
+ * @param {String} message message to send to a user 
+ * @returns response data
+ */
 exports.sendMessageWith2Buttons = async(userId, message) => {
     try {
         userId = userId.toString();
