@@ -105,7 +105,6 @@ let initDefaultValues = async(userId, index) => {
     }
 }
 
-
 /**
  * @description this function revokes when user enters /start command in chat
  * @param {Number} userId unique id of user chat
@@ -116,7 +115,6 @@ exports.startHandler = async(userId) => {
         clearFlags(userId).catch(err => {
             logger.error(`Error,${err.message}`)
         })
-
         if (await checkIfUserIsregistered(userId)) {
             await updateInfo({ user_id: userId })
         } else {
@@ -141,7 +139,6 @@ exports.startHandler = async(userId) => {
  * @param {String} firstName frist name of the user
  * @param {String} lastName last name of the user
  */
-
 exports.answerHandler = async(userId, message, firstName, lastName) => {
 
     const language = await languageChooser(userId)
@@ -154,7 +151,6 @@ exports.answerHandler = async(userId, message, firstName, lastName) => {
             await sendMessage(userId, language.wrongAnswer);
             await sendMessage(userId, `${await generateOneRandom(userId)} + ${await generateTwoRandom(userId)} =`);
         }
-
     } catch (err) {
         logger.error(`Error from answer handler , ${err.message}`);
         clearFlags(userId).catch(err => {
@@ -164,31 +160,11 @@ exports.answerHandler = async(userId, message, firstName, lastName) => {
 }
 
 /**
- * @description this function revokes when user succesfully joined telegram group and channel and callback data is "user_detail"
+ * @description this function is used to validate email message and ask for twitter profile
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
-
-exports.emailHandler = async(userId) => {
-    const language = await languageChooser(userId)
-    try {
-        await sendMessage(userId, language.askForEmail)
-        await flowPathIndicator.set(userId, "3")
-    } catch (err) {
-        logger.error(`Error from email handler, ${err.message}`);
-        clearFlags(userId).catch(err => {
-            logger.error(`Error,${err.message}`)
-        })
-    }
-}
-
-/**
- * @description this function revokes when user enters email id and flowpath is set to "3"
- * @param {Number} userId unique id of user chat
- * @param {String} message text message from user input
- */
-
-exports.twitterProfileHandler = async(userId, message) => {
+exports.emailHandler = async(userId, message) => {
     const language = await languageChooser(userId)
     try {
         if (validate.emailValidator(message)) {
@@ -199,10 +175,8 @@ exports.twitterProfileHandler = async(userId, message) => {
             //wrong email address
             await sendMessage(userId, language.invalidEmail)
         }
-
-
     } catch (err) {
-        logger.error(`Error from twitter handler, ${err.message}`);
+        logger.error(`Error from email handler, ${err.message}`);
         clearFlags(userId).catch(err => {
             logger.error(`Error,${err.message}`)
         })
@@ -210,12 +184,11 @@ exports.twitterProfileHandler = async(userId, message) => {
 }
 
 /**
- * @description this function revokes when user enters twitter and flowpath is set to "4"
+ * @description used to validate twitter profile and then ask for reddit profile
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
-
-exports.redditProfileHandler = async(userId, message) => {
+exports.twitterProfileHandler = async(userId, message) => {
     const language = await languageChooser(userId)
     try {
         if (await urlVerifier(message, "twitter")) {
@@ -227,7 +200,7 @@ exports.redditProfileHandler = async(userId, message) => {
             await sendMessage(userId, language.invalidTwitterProfile)
         }
     } catch (err) {
-        logger.error(`Error from reddit handler, ${err.message}`);
+        logger.error(`Error from twitter handler, ${err.message}`);
         clearFlags(userId).catch(err => {
             logger.error(`Error,${err.message}`)
         })
@@ -235,12 +208,12 @@ exports.redditProfileHandler = async(userId, message) => {
 }
 
 /**
- * @description this function revokes when user enters reddit profile and flowpath is set to "5"
+ * @description used to validate reddit profile and then ask for discord username
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
 
-exports.discordUsernameHandler = async(userId, message) => {
+exports.redditProfileHandler = async(userId, message) => {
     const language = await languageChooser(userId)
     try {
         if (await urlVerifier(message, "reddit")) {
@@ -252,30 +225,29 @@ exports.discordUsernameHandler = async(userId, message) => {
             await sendMessage(userId, language.invalidReddit)
         }
     } catch (err) {
-        logger.error(`Error from discord handler, ${err.message}`);
+        logger.error(`Error from reddit handler, ${err.message}`);
         clearFlags(userId).catch(err => {
             logger.error(`Error,${err.message}`)
         })
     }
 }
 
-
 /**
- * @description this function revokes when user enters discord username and flowpath is set to "6"
+ * @description used to validate discord username and then ask for fb profile link
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
-
-exports.facebookProfileHandler = async(userId, message) => {
+exports.discordUsernameHandler = async(userId, message) => {
     const language = await languageChooser(userId)
     try {
-        if ((await checkLevelOneDone(userId)) !== null) {
-            await updateInfo({ user_id: userId }, { completed_level_of_tasks: 1 })
-        }
-        if (message.match(/(?=\S+)#[\d]{4}$/)) {
+
+        if (message.match(/^.{3,32}#[0-9]{4}$/)) {
             await updateInfo({ user_id: userId }, { "UserInfo.discord_username": message })
             await sendMessageWith2Buttons(userId, language.askForFacebookProfileLink);
             await flowPathIndicator.set(userId, "7")
+            if ((await checkLevelOneDone(userId)) !== null) {
+                await updateInfo({ user_id: userId }, { completed_level_of_tasks: 1 })
+            }
         } else {
             //wrong discord username
             await sendMessage(userId, language.invalidDiscordUsername)
@@ -289,12 +261,11 @@ exports.facebookProfileHandler = async(userId, message) => {
 }
 
 /**
- * @description this function revokes when user enters fb profile link and flowpath is set to "7" or prssed "SKIP THE TASK"
+ * @description used to validate fb profile and then ask for insta profile link
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
-
-exports.instagramProfileHandler = async(userId, message) => {
+exports.facebookProfileHandler = async(userId, message) => {
     const language = await languageChooser(userId)
     try {
         if (await urlVerifier(message, "facebook") || message === "SKIP THE TASK") {
@@ -307,28 +278,26 @@ exports.instagramProfileHandler = async(userId, message) => {
             await flowPathIndicator.set(userId, "8")
 
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await updateInfo({ user_id: userId }, { "UserInfo.fb_profile_link": null })
             await sendMessage(userId, language.askForWalletAddress);
             await flowPathIndicator.set(userId, "20")
         } else {
             await sendMessage(userId, language.invalidFacebookUsername)
         }
-
     } catch (err) {
-        logger.error(`Error from instagram handler, ${err.message}`);
+        logger.error(`Error from discord handler, ${err.message}`);
         clearFlags(userId).catch(err => {
             logger.error(`Error,${err.message}`)
         })
     }
 }
 
-
 /**
- * @description this function revokes when user enters insta profile link and flowpath is set to "8" or prssed "SKIP THE TASK"
+ * @description used to validate insta profile then ask for discord invitaion link
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
-
-exports.discordInvitationHandler = async(userId, message) => {
+exports.instagramProfileHandler = async(userId, message) => {
     const language = await languageChooser(userId)
     try {
         if (await urlVerifier(message, "instagram") || message === "SKIP THE TASK") {
@@ -340,15 +309,14 @@ exports.discordInvitationHandler = async(userId, message) => {
             await sendMessageWith2Buttons(userId, language.askForDiscordInvitationLink)
             await flowPathIndicator.set(userId, "9")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await updateInfo({ user_id: userId }, { "UserInfo.insta_profile_link": null })
             await sendMessage(userId, language.askForWalletAddress);
             await flowPathIndicator.set(userId, "20")
         } else {
             await sendMessage(userId, language.invalidInstagramUsername)
         }
-
-
     } catch (err) {
-        logger.error(`Error from discord invititaion handler, ${err.message}`);
+        logger.error(`Error from instagram handler, ${err.message}`);
         clearFlags(userId).catch(err => {
             logger.error(`Error,${err.message}`)
         })
@@ -356,12 +324,11 @@ exports.discordInvitationHandler = async(userId, message) => {
 }
 
 /**
- * @description this function revokes when user enters discord invitation link and flowpath is set to "9" or prssed "SKIP THE TASK"
+ * @description used to validate discord link then ask for telegram usernames
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
-
-exports.telegramUsernamesHandler = async(userId, message) => {
+exports.discordInvitationHandler = async(userId, message) => {
     const language = await languageChooser(userId)
     try {
         if (await urlVerifier(message, "discord") || message === "SKIP THE TASK") {
@@ -374,27 +341,25 @@ exports.telegramUsernamesHandler = async(userId, message) => {
             await sendMessage(userId, language.askForFirstUserName)
             await flowPathIndicator.set(userId, "10");
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await updateInfo({ user_id: userId }, { "UserInfo.discord_invitation_link": null })
             await sendMessage(userId, language.askForWalletAddress);
             await flowPathIndicator.set(userId, "20")
         } else {
             await sendMessage(userId, language.invalidDiscordInvitationLink)
         }
-
     } catch (err) {
-        logger.error(`Error from telegram usernames handler, ${err.message}`);
+        logger.error(`Error from discord invititaion handler, ${err.message}`);
         clearFlags(userId).catch(err => {
             logger.error(`Error,${err.message}`)
         })
     }
 }
 
-
 /**
- * @description this function revokes when user enters telegram username and flowpath is set to "10" or prssed "SKIP THE TASK"
+ * @description used to validate telegram username
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
-
 exports.firstTelegramUserHandler = async(userId, message) => {
     const language = await languageChooser(userId)
     try {
@@ -403,10 +368,13 @@ exports.firstTelegramUserHandler = async(userId, message) => {
             await sendWalletAddressButton(userId, language.askForSecondUserName)
             await flowPathIndicator.set(userId, "11")
         } else if (message === "SKIP THE TASK") {
+            await updateInfo({ user_id: userId }, { "InvitedTelegramUsers.firstUser": null })
+
             await sendMessageWith2Buttons(userId, language.askForTwitterUserNames)
             await sendMessage(userId, language.askForFirstTwitterUser)
             await flowPathIndicator.set(userId, "15")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await updateInfo({ user_id: userId }, { "InvitedTelegramUsers.firstUser": null })
             await sendMessage(userId, language.askForWalletAddress);
             await flowPathIndicator.set(userId, "20")
         } else {
@@ -422,11 +390,10 @@ exports.firstTelegramUserHandler = async(userId, message) => {
 
 
 /**
- * @description this function revokes when user enters telegram username and flowpath is set to "11" or prssed "SKIP THE TASK"
+ * @description used to validate telegram username
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
-
 exports.secondTelegramUserHandler = async(userId, message) => {
     const language = await languageChooser(userId)
     try {
@@ -435,6 +402,7 @@ exports.secondTelegramUserHandler = async(userId, message) => {
             await sendWalletAddressButton(userId, language.askForThirdUserName)
             await flowPathIndicator.set(userId, "12")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await updateInfo({ user_id: userId }, { "InvitedTelegramUsers.secondUser": null })
             await sendMessage(userId, language.askForWalletAddress);
             await flowPathIndicator.set(userId, "20")
         } else {
@@ -446,15 +414,13 @@ exports.secondTelegramUserHandler = async(userId, message) => {
             logger.error(`Error,${err.message}`)
         })
     }
-
 }
 
 /**
- * @description this function revokes when user enters telegram username and flowpath is set to "12" or prssed "SKIP THE TASK"
+ * @description used to validate telegram username
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
-
 exports.thirdTelegramUserHandler = async(userId, message) => {
     const language = await languageChooser(userId)
     try {
@@ -463,6 +429,7 @@ exports.thirdTelegramUserHandler = async(userId, message) => {
             await sendWalletAddressButton(userId, language.askForForthUserName)
             await flowPathIndicator.set(userId, "13")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await updateInfo({ user_id: userId }, { "InvitedTelegramUsers.thirdUser": null })
             await sendMessage(userId, language.askForWalletAddress);
             await flowPathIndicator.set(userId, "20")
         } else {
@@ -478,11 +445,10 @@ exports.thirdTelegramUserHandler = async(userId, message) => {
 }
 
 /**
- * @description this function revokes when user enters telegram username and flowpath is set to "13" or prssed "SKIP THE TASK"
+ * @description used to validate telegram username
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
-
 exports.forthTelegramUserHandler = async(userId, message) => {
     const language = await languageChooser(userId)
     try {
@@ -491,6 +457,8 @@ exports.forthTelegramUserHandler = async(userId, message) => {
             await sendWalletAddressButton(userId, language.askForFifthUserName)
             await flowPathIndicator.set(userId, "14")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await updateInfo({ user_id: userId }, { "InvitedTelegramUsers.forthUser": null })
+
             await sendMessage(userId, language.askForWalletAddress);
             await flowPathIndicator.set(userId, "20")
         } else {
@@ -502,16 +470,14 @@ exports.forthTelegramUserHandler = async(userId, message) => {
             logger.error(`Error,${err.message}`)
         })
     }
-
 }
 
 /**
- * @description this function revokes when user enters telegram username and flowpath is set to "14" or prssed "SKIP THE TASK"
+ * @description used to validate telegram username and then ask for twitter usernames
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
-
-exports.twitterUsernamesHandler = async(userId, message) => {
+exports.fifthTelegramUserHandler = async(userId, message) => {
     const language = await languageChooser(userId)
     try {
         if (message.startsWith("@")) {
@@ -520,13 +486,14 @@ exports.twitterUsernamesHandler = async(userId, message) => {
             await sendMessage(userId, language.askForFirstTwitterUser)
             await flowPathIndicator.set(userId, "15")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await updateInfo({ user_id: userId }, { "InvitedTelegramUsers.fifthUser": null })
             await sendMessage(userId, language.askForWalletAddress);
             await flowPathIndicator.set(userId, "20")
         } else {
             await sendMessage(userId, language.invalidTelegramUserName)
         }
     } catch (err) {
-        logger.error(`Error from twitter user names handler, ${err.message}`);
+        logger.error(`Error from second telegram usernames handler, ${err.message}`);
         clearFlags(userId).catch(err => {
             logger.error(`Error,${err.message}`)
         })
@@ -535,11 +502,10 @@ exports.twitterUsernamesHandler = async(userId, message) => {
 
 
 /**
- * @description this function revokes when user enters twitter profile link and flowpath is set to "15" or prssed "SKIP THE TASK"
+ * @description used to validate twitter username
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
-
 exports.firstTwitterUserHandler = async(userId, message) => {
     const language = await languageChooser(userId)
     try {
@@ -548,6 +514,7 @@ exports.firstTwitterUserHandler = async(userId, message) => {
             await updateInfo({ user_id: userId }, { "InvitedTwitterUsers.firstTwitterUser": message })
             await flowPathIndicator.set(userId, "16")
         } else if (message === "ENTER YOUR WALLET ADDRESS" || message === "SKIP THE TASK") {
+            await updateInfo({ user_id: userId }, { "InvitedTwitterUsers.firstTwitterUser": null })
             await sendMessage(userId, language.askForWalletAddress);
             await flowPathIndicator.set(userId, "20")
         } else {
@@ -563,7 +530,7 @@ exports.firstTwitterUserHandler = async(userId, message) => {
 }
 
 /**
- * @description this function revokes when user enters twitter profile link and flowpath is set to "16" or prssed "SKIP THE TASK"
+ * @description used to validate twitter username
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
@@ -575,6 +542,8 @@ exports.secondTwitterUserHandler = async(userId, message) => {
             await sendWalletAddressButton(userId, language.askForThirdTwitterUser)
             await flowPathIndicator.set(userId, "17")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await updateInfo({ user_id: userId }, { "InvitedTwitterUsers.secondTwitterUser": null })
+
             await sendMessage(userId, language.askForWalletAddress);
             await flowPathIndicator.set(userId, "20")
         } else {
@@ -589,7 +558,7 @@ exports.secondTwitterUserHandler = async(userId, message) => {
 }
 
 /**
- * @description this function revokes when user enters twitter profile link and flowpath is set to "17" or prssed "SKIP THE TASK"
+ * @description used to validate twitter username
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
@@ -601,6 +570,7 @@ exports.thirdTwitterUserHandler = async(userId, message) => {
             await sendWalletAddressButton(userId, language.askForForthTwitterUser)
             await flowPathIndicator.set(userId, "18")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await updateInfo({ user_id: userId }, { "InvitedTwitterUsers.thirdTwitterUser": null })
             await sendMessage(userId, language.askForWalletAddress);
             await flowPathIndicator.set(userId, "20")
         } else {
@@ -615,7 +585,7 @@ exports.thirdTwitterUserHandler = async(userId, message) => {
 }
 
 /**
- * @description this function revokes when user enters twitter profile link and flowpath is set to "18" or prssed "SKIP THE TASK"
+ * @description used to validate twitter username
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
@@ -624,10 +594,11 @@ exports.forthTwitterUserHandler = async(userId, message) => {
     try {
         if (await urlVerifier(message, "twitter")) {
             await updateInfo({ user_id: userId }, { "InvitedTwitterUsers.forthTwitterUser": message })
-
             await sendWalletAddressButton(userId, language.askForFifthTwitterUser)
             await flowPathIndicator.set(userId, "19")
         } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await updateInfo({ user_id: userId }, { "InvitedTwitterUsers.forthTwitterUser": null })
+
             await sendMessage(userId, language.askForWalletAddress);
             await flowPathIndicator.set(userId, "20")
         } else {
@@ -641,28 +612,27 @@ exports.forthTwitterUserHandler = async(userId, message) => {
     }
 }
 
+
 /**
- * @description this function revokes when user enters twitter profile link and flowpath is set to "19" or prssed "SKIP THE TASK" or "ENTER YOUR WALLET ADDRESS"
+ * @description used to validate twitter username
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
-
-exports.walletAddressHandler = async(userId, message) => {
+exports.fifthTwitterUserHandler = async(userId, message) => {
     const language = await languageChooser(userId)
-
     try {
         if (await urlVerifier(message, "twitter")) {
             await updateInfo({ user_id: userId }, { "InvitedTwitterUsers.fifthTwitterUser": message })
 
             await sendMessage(userId, language.askForWalletAddress);
             await flowPathIndicator.set(userId, "20");
+        } else if (message === "ENTER YOUR WALLET ADDRESS") {
+            await updateInfo({ user_id: userId }, { "InvitedTwitterUsers.fifthTwitterUser": null })
         } else {
             await sendMessage(userId, language.invalidTwitterProfile)
-
         }
-
     } catch (err) {
-        logger.error(`Error from wallet address handler, ${err.message}`);
+        logger.error(`Error from second telegram usernames handler, ${err.message}`);
         clearFlags(userId).catch(err => {
             logger.error(`Error,${err.message}`)
         })
@@ -671,33 +641,30 @@ exports.walletAddressHandler = async(userId, message) => {
 
 
 /**
- * @description this function revokes when user enters wallet address and flowpath is set to "20" or prssed "SKIP THE TASK" or "ENTER YOUR WALLET ADDRESS"
+ * @description used to take wallet address and then send thank you message to user
  * @param {Number} userId unique id of user chat
  * @param {String} message text message from user input
  */
-
-exports.thankYouHandler = async(userId, message) => {
+exports.walletAddressHandler = async(userId, message) => {
     const language = await languageChooser(userId)
     try {
+        console.log(await checkUserFbProfile(userId))
+        console.log(await checkUserInstaProfile(userId))
+        console.log(await checkDiscordInvitation(userId))
         await sendMessage(userId, language.thankYouMessage)
         await updateInfo({ user_id: userId }, { is_participated: true }, { "UserInfo.wallet_wallet_address": message })
         if (await checkUserFbProfile(userId) !== null && await checkUserInstaProfile(userId) !== null && await checkDiscordInvitation(userId) !== null) {
             if (await checkAllTelegramUsers(userId) !== null && await checkAllTwitterUser(userId) !== null) {
                 await updateInfo({ user_id: userId }, { completed_level_of_tasks: 3 })
-
             } else {
                 await updateInfo({ user_id: userId }, { completed_level_of_tasks: 2 })
-
             }
         }
         clearFlags(userId).catch(err => {
             logger.error(`Error,${err.message}`)
         })
-
     } catch (err) {
-
-        logger.error(`Error from thank you handler, ${language.somethingWentWrong}`);
-        console.log(err.message)
+        logger.error(`Error from wallet address handler, ${err.message}`);
         clearFlags(userId).catch(err => {
             logger.error(`Error,${err.message}`)
         })

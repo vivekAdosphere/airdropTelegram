@@ -20,10 +20,9 @@ const {
     facebookProfileHandler,
     instagramProfileHandler,
     discordInvitationHandler,
-    telegramUsernamesHandler,
-    twitterUsernamesHandler,
+
     walletAddressHandler,
-    thankYouHandler,
+
     firstTelegramUserHandler,
     secondTelegramUserHandler,
     thirdTelegramUserHandler,
@@ -32,6 +31,8 @@ const {
     firstTwitterUserHandler,
     thirdTwitterUserHandler,
     forthTwitterUserHandler,
+    fifthTwitterUserHandler,
+    fifthTelegramUserHandler,
 } = require("../controllers/messagingFunction");
 const { updateInfo } = require("../functionality/service");
 
@@ -61,25 +62,25 @@ exports.handleTextMessage = async(userId, message, firstName, lastName) => {
                     sendMessageWithTaskButtons(userId, language.taskList)
                     break
                 case "3":
-                    twitterProfileHandler(userId, message)
+                    emailHandler(userId, message)
                     break
                 case "4":
-                    redditProfileHandler(userId, message)
+                    twitterProfileHandler(userId, message)
                     break
                 case "5":
-                    discordUsernameHandler(userId, message)
+                    redditProfileHandler(userId, message)
                     break
                 case "6":
-                    facebookProfileHandler(userId, message)
+                    discordUsernameHandler(userId, message)
                     break
                 case "7":
-                    instagramProfileHandler(userId, message)
+                    facebookProfileHandler(userId, message)
                     break
                 case "8":
-                    discordInvitationHandler(userId, message)
+                    instagramProfileHandler(userId, message)
                     break
                 case "9":
-                    telegramUsernamesHandler(userId, message)
+                    discordInvitationHandler(userId, message)
                     break
                 case "10":
                     firstTelegramUserHandler(userId, message)
@@ -94,7 +95,7 @@ exports.handleTextMessage = async(userId, message, firstName, lastName) => {
                     forthTelegramUserHandler(userId, message)
                     break
                 case "14":
-                    twitterUsernamesHandler(userId, message)
+                    fifthTelegramUserHandler(userId, message)
                     break
                 case "15":
                     firstTwitterUserHandler(userId, message)
@@ -109,10 +110,10 @@ exports.handleTextMessage = async(userId, message, firstName, lastName) => {
                     forthTwitterUserHandler(userId, message)
                     break
                 case "19":
-                    walletAddressHandler(userId, message)
+                    fifthTwitterUserHandler(userId, message)
                     break
                 case "20":
-                    thankYouHandler(userId, message)
+                    walletAddressHandler(userId, message)
                     break
                 default:
                     sendMessage(userId, language.somethingWentWrong)
@@ -146,7 +147,8 @@ exports.handleCallback_query = async(userId, callbackData) => {
                 case "user_detail":
                     if (await isMemberOfGroup(groupId, userId)) {
                         await updateInfo({ chat_id: userId }, { is_joined_telegram_group: true })
-                        emailHandler(userId, language.askForEmail)
+                        await sendMessage(userId, language.askForEmail)
+                        await flowPathIndicator.set(userId, "3")
                     } else {
                         sendMandatoryMessage(userId, language.dothisFirst)
                     }

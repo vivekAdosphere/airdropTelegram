@@ -39,7 +39,7 @@ exports.updateInfo = async(userId, dataObject) => {
 exports.checkIfUserIsregistered = async(userId) => {
     try {
         const user = await User.findOne({ user_id: userId })
-        return user.user_id
+        return user
 
     } catch (err) {
         logger.error(`DB Fetch Error from checking---> ${JSON.stringify(err)}`)
@@ -118,7 +118,7 @@ exports.checkUserInstaProfile = async(userId) => {
 exports.checkDiscordInvitation = async(userId) => {
     try {
         const user = await User.findOne({ user_id: userId })
-        return user ? UserInfo.discord_invitationv_link : user
+        return user ? user.UserInfo.discord_invitationv_link : user
     } catch (err) {
         logger.error(`DB Fetch Error from checking---> ${JSON.stringify(err)}`)
         return false
