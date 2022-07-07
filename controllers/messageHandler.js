@@ -146,7 +146,7 @@ exports.handleCallback_query = async(userId, callbackData) => {
             switch (callbackData) {
                 case "user_detail":
                     if (await isMemberOfGroup(groupId, userId)) {
-                        await updateInfo({ chat_id: userId }, { is_joined_telegram_group: true })
+                        await updateInfo({ user_id: userId }, { is_joined_telegram_group: true })
                         await sendMessage(userId, language.askForEmail)
                         await flowPathIndicator.set(userId, "3")
                     } else {

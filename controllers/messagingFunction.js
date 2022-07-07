@@ -245,9 +245,7 @@ exports.discordUsernameHandler = async(userId, message) => {
             await updateInfo({ user_id: userId }, { "UserInfo.discord_username": message })
             await sendMessageWith2Buttons(userId, language.askForFacebookProfileLink);
             await flowPathIndicator.set(userId, "7")
-            if ((await checkLevelOneDone(userId)) !== null) {
-                await updateInfo({ user_id: userId }, { completed_level_of_tasks: 1 })
-            }
+
         } else {
             //wrong discord username
             await sendMessage(userId, language.invalidDiscordUsername)
@@ -652,7 +650,11 @@ exports.walletAddressHandler = async(userId, message) => {
         console.log(await checkUserInstaProfile(userId))
         console.log(await checkDiscordInvitation(userId))
         await sendMessage(userId, language.thankYouMessage)
-        await updateInfo({ user_id: userId }, { is_participated: true }, { "UserInfo.wallet_wallet_address": message })
+        if ((await checkLevelOneDone(userId)) !== null) {
+            await updateInfo({ user_id: userId }, { completed_level_of_tasks: 1 })
+        }
+        await updateInfo({ user_id: userId }, { is_participated: true })
+        await updateInfo({ user_id: userId }, { "UserInfo.wallet_address": message })
         if (await checkUserFbProfile(userId) !== null && await checkUserInstaProfile(userId) !== null && await checkDiscordInvitation(userId) !== null) {
             if (await checkAllTelegramUsers(userId) !== null && await checkAllTwitterUser(userId) !== null) {
                 await updateInfo({ user_id: userId }, { completed_level_of_tasks: 3 })
